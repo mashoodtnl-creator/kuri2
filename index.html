@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashood Kuri Pro</title>
+    <style>
+        body { background: #050b07; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .btn { background: #dfb73c; padding: 15px; width: 100%; border: none; border-radius: 10px; margin-top: 10px; font-weight: bold; }
+        .wheel { width: 250px; height: 250px; border: 8px solid #dfb73c; border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Mashood Kuri</h2>
+    <div class="wheel" id="wheel">Spin!</div>
+    <button class="btn" onclick="startDraw()">ലക്കി ഡ്രോ ആരംഭിക്കുക 🎲</button>
+    <h3 id="winner"></h3>
+
+    <script>
+        function startDraw() {
+            const wheel = document.getElementById('wheel');
+            wheel.style.transform = `rotate(${Math.floor(Math.random() * 3600) + 1440}deg)`;
+            wheel.style.transition = "transform 5s ease-out";
+            setTimeout(() => {
+                document.getElementById('winner').innerText = "🎉 വിജയി: മെമ്പർ 07 🎉";
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
+
