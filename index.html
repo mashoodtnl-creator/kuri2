@@ -2,92 +2,105 @@
 <html lang="ml">
 <head>
     <meta charset="UTF-8">
-    <title>Classic Cafe Premium Dashboard</title>
+    <title>Classic Cafe | Management Dashboard</title>
     <style>
-        :root { --primary: #2c3e50; --accent: #27ae60; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h1, h2 { color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { padding: 20px; border-radius: 10px; background: #fff; border: 1px solid #eee; transition: 0.3s; }
-        .card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .stat-box { font-size: 1.2em; font-weight: bold; color: var(--primary); margin: 10px 0; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
+        :root { --bg: #f8f9fa; --card: #ffffff; --primary: #2d3436; --accent: #0984e3; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--primary); padding: 20px; }
+        .container { max-width: 1000px; margin: auto; }
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .card { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .full-width { grid-column: 1 / -1; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 6px; width: 100%; margin: 5px 0; }
+        button { padding: 10px 15px; background: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #eee; padding: 10px; text-align: left; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Classic Cafe Premium Dashboard</h1>
+    <h2>Classic Cafe Dashboard</h2>
     
-    <div class="dashboard-grid">
+    <div class="dashboard">
         <div class="card">
-            <h3>Daily Sales & Expenses</h3>
-            <input type="month" id="monthInput">
-            <input type="number" id="cashSale" placeholder="Cash Collection">
-            <input type="number" id="paytmSale" placeholder="Paytm Collection">
-            <input type="number" id="expenses" placeholder="Total Expenses">
-            <button onclick="saveData()">Add Daily Report</button>
+            <h3>Daily Report Entry</h3>
+            <input type="number" id="cashIn" placeholder="Cash Collection">
+            <input type="number" id="paytmIn" placeholder="Paytm Collection">
+            <input type="number" id="expensesIn" placeholder="Total Expenses">
+            <button onclick="calculate()">Update Report</button>
         </div>
-
         <div class="card">
-            <h3>Monthly Overview</h3>
-            <div class="stat-box">Total Sales: <span id="totSales">0</span></div>
-            <div class="stat-box">Net Profit: <span id="netProfit">0</span></div>
-            <div class="stat-box">Profit %: <span id="profitPerc">0</span>%</div>
+            <h3>Financial Overview</h3>
+            <p>Total Sales: ₹<span id="totSales">0</span></p>
+            <p>Net Profit: ₹<span id="netProfit">0</span></p>
+            <p>Profit %: <span id="profitPerc">0</span>%</p>
             <hr>
-            <p>Cash Balance: <span id="cashBal">0</span></p>
-            <p>Paytm Balance: <span id="paytmBal">0</span></p>
+            <p>Cash Balance: ₹<span id="cBal">0</span></p>
+            <p>Paytm Balance: ₹<span id="pBal">0</span></p>
         </div>
     </div>
 
-    <table id="reportTable">
-        <tr><th>Month</th><th>Cash</th><th>Paytm</th><th>Expenses</th><th>Action</th></tr>
-    </table>
+    <div class="dashboard">
+        <div class="card">
+            <h3>Stock List</h3>
+            <input type="text" id="stockName" placeholder="Item Name">
+            <button onclick="addEntry('stocks', 'stockName')">Add Stock</button>
+            <table id="stockTable"></table>
+        </div>
+        <div class="card">
+            <h3>Staff Management</h3>
+            <input type="text" id="staffName" placeholder="Staff Name">
+            <button onclick="addEntry('staff', 'staffName')">Add Staff</button>
+            <table id="staffTable"></table>
+        </div>
+    </div>
 </div>
 
 <script>
-    let reports = JSON.parse(localStorage.getItem('cafeReports')) || [];
+    let db = JSON.parse(localStorage.getItem('cafeDB')) || { stocks: [], staff: [] };
 
-    function saveData() {
-        let m = document.getElementById('monthInput').value;
-        let c = parseFloat(document.getElementById('cashSale').value) || 0;
-        let p = parseFloat(document.getElementById('paytmSale').value) || 0;
-        let e = parseFloat(document.getElementById('expenses').value) || 0;
+    function calculate() {
+        let cash = parseFloat(document.getElementById('cashIn').value) || 0;
+        let paytm = parseFloat(document.getElementById('paytmIn').value) || 0;
+        let exp = parseFloat(document.getElementById('expensesIn').value) || 0;
         
-        if(!m) { alert("Please select a month"); return; }
+        let sales = cash + paytm;
+        let profit = sales - exp;
+        let perc = sales > 0 ? ((profit / sales) * 100).toFixed(2) : 0;
 
-        reports.push({m, c, p, e});
-        localStorage.setItem('cafeReports', JSON.stringify(reports));
-        renderTable();
+        document.getElementById('totSales').innerText = sales;
+        document.getElementById('netProfit').innerText = profit;
+        document.getElementById('profitPerc').innerText = perc;
+        document.getElementById('cBal').innerText = cash;
+        document.getElementById('pBal').innerText = paytm;
     }
 
-    function renderTable() {
-        let table = document.getElementById('reportTable');
-        table.innerHTML = "<tr><th>Month</th><th>Cash</th><th>Paytm</th><th>Expenses</th><th>Action</th></tr>";
-        let totalS = 0, totalP = 0, totalC = 0;
+    function addEntry(key, inputId) {
+        let val = document.getElementById(inputId).value;
+        if(val) {
+            db[key].push(val);
+            localStorage.setItem('cafeDB', JSON.stringify(db));
+            render();
+        }
+    }
 
-        reports.forEach((item, index) => {
-            let sale = item.c + item.p;
-            totalS += sale;
-            totalC += item.c;
-            totalP += item.p;
-            table.innerHTML += `<tr><td>${item.m}</td><td>${item.c}</td><td>${item.p}</td><td>${item.e}</td>
-            <td><button onclick="deleteRow(${index})" style="background:red">Del</button></td></tr>`;
+    function render() {
+        ['stocks', 'staff'].forEach(key => {
+            let table = document.getElementById(key + 'Table');
+            table.innerHTML = "<tr><th>Name</th><th>Action</th></tr>";
+            db[key].forEach((item, index) => {
+                table.innerHTML += `<tr><td>${item}</td><td><button onclick="del('${key}', ${index})">Del</button></td></tr>`;
+            });
         });
-
-        document.getElementById('totSales').innerText = totalS;
-        document.getElementById('cashBal').innerText = totalC;
-        document.getElementById('paytmBal').innerText = totalP;
-        document.getElementById('netProfit').innerText = (totalS - totalP); // Simple logic
     }
 
-    function deleteRow(i) { reports.splice(i, 1); localStorage.setItem('cafeReports', JSON.stringify(reports)); renderTable(); }
-    renderTable();
-</script>
+    function del(key, i) {
+        db[key].splice(i, 1);
+        localStorage.setItem('cafeDB', JSON.stringify(db));
+        render();
+    }
 
+    render();
+</script>
 </body>
 </html>
