@@ -2,98 +2,91 @@
 <html lang="ml">
 <head>
     <meta charset="UTF-8">
-    <title>Classic Cafe Complete Dashboard</title>
+    <title>Classic Cafe Premium Dashboard</title>
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; }
-        .container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .card { background: #fff; padding: 15px; border: 1px solid #ddd; border-radius: 8px; text-align: center; }
-        input { padding: 8px; margin: 5px; width: 80%; }
-        button { padding: 8px 15px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 4px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        :root { --primary: #2c3e50; --accent: #27ae60; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1, h2 { color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { padding: 20px; border-radius: 10px; background: #fff; border: 1px solid #eee; transition: 0.3s; }
+        .card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .stat-box { font-size: 1.2em; font-weight: bold; color: var(--primary); margin: 10px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Classic Cafe Dashboard</h1>
+    <h1>Classic Cafe Premium Dashboard</h1>
     
-    <div class="grid">
+    <div class="dashboard-grid">
         <div class="card">
-            <h3>Sales Entry</h3>
-            <input type="number" id="cashSale" placeholder="Cash Sale">
-            <input type="number" id="paytmSale" placeholder="Paytm Sale">
-            <input type="number" id="expenses" placeholder="Expenses">
-            <button onclick="updateData()">Update Data</button>
+            <h3>Daily Sales & Expenses</h3>
+            <input type="month" id="monthInput">
+            <input type="number" id="cashSale" placeholder="Cash Collection">
+            <input type="number" id="paytmSale" placeholder="Paytm Collection">
+            <input type="number" id="expenses" placeholder="Total Expenses">
+            <button onclick="saveData()">Add Daily Report</button>
         </div>
+
         <div class="card">
-            <h3>Summary</h3>
-            <p>Total Sales: <span id="totSales">0</span></p>
-            <p>Net Profit: <span id="netProfit">0</span></p>
-            <p>Profit %: <span id="profitPerc">0</span>%</p>
+            <h3>Monthly Overview</h3>
+            <div class="stat-box">Total Sales: <span id="totSales">0</span></div>
+            <div class="stat-box">Net Profit: <span id="netProfit">0</span></div>
+            <div class="stat-box">Profit %: <span id="profitPerc">0</span>%</div>
+            <hr>
+            <p>Cash Balance: <span id="cashBal">0</span></p>
+            <p>Paytm Balance: <span id="paytmBal">0</span></p>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="card">
-            <h3>Stock Management</h3>
-            <input type="text" id="stockItem" placeholder="Item Name">
-            <button onclick="addList('stocks', 'stockItem')">Add</button>
-            <table id="stockTable"></table>
-        </div>
-        <div class="card">
-            <h3>Staff Management</h3>
-            <input type="text" id="staffItem" placeholder="Staff Name">
-            <button onclick="addList('staff', 'staffItem')">Add</button>
-            <table id="staffTable"></table>
-        </div>
-    </div>
+    <table id="reportTable">
+        <tr><th>Month</th><th>Cash</th><th>Paytm</th><th>Expenses</th><th>Action</th></tr>
+    </table>
 </div>
 
 <script>
-    let data = JSON.parse(localStorage.getItem('cafeData')) || { stocks: [], staff: [] };
+    let reports = JSON.parse(localStorage.getItem('cafeReports')) || [];
 
-    function updateData() {
-        let cash = parseFloat(document.getElementById('cashSale').value) || 0;
-        let paytm = parseFloat(document.getElementById('paytmSale').value) || 0;
-        let exp = parseFloat(document.getElementById('expenses').value) || 0;
+    function saveData() {
+        let m = document.getElementById('monthInput').value;
+        let c = parseFloat(document.getElementById('cashSale').value) || 0;
+        let p = parseFloat(document.getElementById('paytmSale').value) || 0;
+        let e = parseFloat(document.getElementById('expenses').value) || 0;
         
-        let sales = cash + paytm;
-        let profit = sales - exp;
-        let perc = sales > 0 ? ((profit / sales) * 100).toFixed(2) : 0;
+        if(!m) { alert("Please select a month"); return; }
 
-        document.getElementById('totSales').innerText = sales;
-        document.getElementById('netProfit').innerText = profit;
-        document.getElementById('profitPerc').innerText = perc;
+        reports.push({m, c, p, e});
+        localStorage.setItem('cafeReports', JSON.stringify(reports));
+        renderTable();
     }
 
-    function addList(key, inputId) {
-        let val = document.getElementById(inputId).value;
-        if(val) {
-            data[key].push(val);
-            localStorage.setItem('cafeData', JSON.stringify(data));
-            renderLists();
-        }
-    }
+    function renderTable() {
+        let table = document.getElementById('reportTable');
+        table.innerHTML = "<tr><th>Month</th><th>Cash</th><th>Paytm</th><th>Expenses</th><th>Action</th></tr>";
+        let totalS = 0, totalP = 0, totalC = 0;
 
-    function renderLists() {
-        ['stocks', 'staff'].forEach(key => {
-            let table = document.getElementById(key + 'Table');
-            table.innerHTML = "";
-            data[key].forEach((item, index) => {
-                table.innerHTML += `<tr><td>${item}</td><td><button onclick="deleteItem('${key}', ${index})">Delete</button></td></tr>`;
-            });
+        reports.forEach((item, index) => {
+            let sale = item.c + item.p;
+            totalS += sale;
+            totalC += item.c;
+            totalP += item.p;
+            table.innerHTML += `<tr><td>${item.m}</td><td>${item.c}</td><td>${item.p}</td><td>${item.e}</td>
+            <td><button onclick="deleteRow(${index})" style="background:red">Del</button></td></tr>`;
         });
+
+        document.getElementById('totSales').innerText = totalS;
+        document.getElementById('cashBal').innerText = totalC;
+        document.getElementById('paytmBal').innerText = totalP;
+        document.getElementById('netProfit').innerText = (totalS - totalP); // Simple logic
     }
 
-    function deleteItem(key, index) {
-        data[key].splice(index, 1);
-        localStorage.setItem('cafeData', JSON.stringify(data));
-        renderLists();
-    }
-
-    renderLists();
+    function deleteRow(i) { reports.splice(i, 1); localStorage.setItem('cafeReports', JSON.stringify(reports)); renderTable(); }
+    renderTable();
 </script>
 
 </body>
