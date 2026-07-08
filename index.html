@@ -2,121 +2,17 @@
 <html lang="ml">
 <head>
     <meta charset="UTF-8">
-    <title>Classic Cafe | Management Dashboard</title>
-    <style>
-        :root { --bg: #f8f9fa; --card: #ffffff; --primary: #2d3436; --accent: #0984e3; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--primary); padding: 20px; }
-        .container { max-width: 1000px; margin: auto; }
-        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .card { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .full-width { grid-column: 1 / -1; }
-        input { padding: 10px; border: 1px solid #ddd; border-radius: 6px; width: 100%; margin: 5px 0; }
-        button { padding: 10px 15px; background: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #eee; padding: 10px; text-align: left; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h2>Classic Cafe Dashboard</h2>
-    
-    <div class="dashboard">
-        <div class="card">
-            <h3>Daily Report Entry</h3>
-            <input type="number" id="cashIn" placeholder="Cash Collection">
-            <input type="number" id="paytmIn" placeholder="Paytm Collection">
-            <input type="number" id="expensesIn" placeholder="Total Expenses">
-            <button onclick="calculate()">Update Report</button>
-        </div>
-        <div class="card">
-            <h3>Financial Overview</h3>
-            <p>Total Sales: ₹<span id="totSales">0</span></p>
-            <p>Net Profit: ₹<span id="netProfit">0</span></p>
-            <p>Profit %: <span id="profitPerc">0</span>%</p>
-            <hr>
-            <p>Cash Balance: ₹<span id="cBal">0</span></p>
-            <p>Paytm Balance: ₹<span id="pBal">0</span></p>
-        </div>
-    </div>
-
-    <div class="dashboard">
-        <div class="card">
-            <h3>Stock List</h3>
-            <input type="text" id="stockName" placeholder="Item Name">
-            <button onclick="addEntry('stocks', 'stockName')">Add Stock</button>
-            <table id="stockTable"></table>
-        </div>
-        <div class="card">
-            <h3>Staff Management</h3>
-            <input type="text" id="staffName" placeholder="Staff Name">
-            <button onclick="addEntry('staff', 'staffName')">Add Staff</button>
-            <table id="staffTable"></table>
-        </div>
-    </div>
-</div>
-
-<script>
-    let db = JSON.parse(localStorage.getItem('cafeDB')) || { stocks: [], staff: [] };
-
-    function calculate() {
-        let cash = parseFloat(document.getElementById('cashIn').value) || 0;
-        let paytm = parseFloat(document.getElementById('paytmIn').value) || 0;
-        let exp = parseFloat(document.getElementById('expensesIn').value) || 0;
-        
-        let sales = cash + paytm;
-        let profit = sales - exp;
-        let perc = sales > 0 ? ((profit / sales) * 100).toFixed(2) : 0;
-
-        document.getElementById('totSales').innerText = sales;
-        document.getElementById('netProfit').innerText = profit;
-        document.getElementById('profitPerc').innerText = perc;
-        document.getElementById('cBal').innerText = cash;
-        document.getElementById('pBal').innerText = paytm;
-    }
-
-    function addEntry(key, inputId) {
-        let val = document.getElementById(inputId).value;
-        if(val) {
-            db[key].push(val);
-            localStorage.setItem('cafeDB', JSON.stringify(db));
-            render();
-        }
-    }
-
-    function render() {
-        ['stocks', 'staff'].forEach(key => {
-            let table = document.getElementById(key + 'Table');
-            table.innerHTML = "<tr><th>Name</th><th>Action</th></tr>";
-            db[key].forEach((item, index) => {
-                table.innerHTML += `<tr><td>${item}</td><td><button onclick="del('${key}', ${index})">Del</button></td></tr>`;
-            });
-        });
-    }
-
-    function del(key, i) {
-        db[key].splice(i, 1);
-        localStorage.setItem('cafeDB', JSON.stringify(db));
-        render();
-    }
-
-    render();
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ml">
-<head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classic Cafe Dashboard</title>
     <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: #fff; padding: 10px; }
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card { background: #2d2d2d; padding: 15px; border-radius: 8px; }
-        input { width: 90%; padding: 8px; margin: 5px 0; background: #444; border: none; color: white; border-radius: 4px; }
-        button { padding: 8px 15px; background: #007bff; border: none; color: white; border-radius: 4px; cursor: pointer; }
-        table { width: 100%; font-size: 0.9em; margin-top: 10px; border-collapse: collapse; }
-        td { border-bottom: 1px solid #444; padding: 5px; }
+        body { font-family: sans-serif; background: #121212; color: #e0e0e0; padding: 15px; margin: 0; }
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: #1e1e1e; padding: 15px; border-radius: 10px; border: 1px solid #333; }
+        input { width: 100%; padding: 10px; margin: 5px 0; background: #2d2d2d; border: 1px solid #444; color: white; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #007bff; border: none; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        table { width: 100%; margin-top: 10px; border-collapse: collapse; }
+        td { padding: 8px; border-bottom: 1px solid #333; }
+        h3, h4 { color: #fff; margin-top: 0; }
     </style>
 </head>
 <body>
@@ -136,6 +32,7 @@
         <p>Total Sales: ₹<span id="totSales">0</span></p>
         <p>Net Profit: ₹<span id="netProfit">0</span></p>
         <p>Profit %: <span id="profitPerc">0</span>%</p>
+        <hr style="border: 0; border-top: 1px solid #444;">
         <p>Cash Balance: ₹<span id="cBal">0</span></p>
         <p>Paytm Balance: ₹<span id="pBal">0</span></p>
     </div>
@@ -143,14 +40,14 @@
     <div class="card">
         <h4>Stock List</h4>
         <input type="text" id="stockName" placeholder="Item Name">
-        <button onclick="addEntry('stocks', 'stockName')">Add</button>
+        <button onclick="addEntry('stocks', 'stockName')">Add Stock</button>
         <table id="stockTable"></table>
     </div>
 
     <div class="card">
         <h4>Staff Management</h4>
         <input type="text" id="staffName" placeholder="Staff Name">
-        <button onclick="addEntry('staff', 'staffName')">Add</button>
+        <button onclick="addEntry('staff', 'staffName')">Add Staff</button>
         <table id="staffTable"></table>
     </div>
 </div>
@@ -173,7 +70,7 @@
 
     function addEntry(key, id) {
         let val = document.getElementById(id).value;
-        if(val) { db[key].push(val); localStorage.setItem('cafeDB', JSON.stringify(db)); render(); }
+        if(val) { db[key].push(val); localStorage.setItem('cafeDB', JSON.stringify(db)); render(); document.getElementById(id).value = ''; }
     }
 
     function render() {
@@ -181,7 +78,7 @@
             let t = document.getElementById(key + 'Table');
             t.innerHTML = "";
             db[key].forEach((item, i) => {
-                t.innerHTML += `<tr><td>${item}</td><td><button onclick="del('${key}', ${i})">X</button></td></tr>`;
+                t.innerHTML += `<tr><td>${item}</td><td><button style="background:red; padding:2px 8px" onclick="del('${key}', ${i})">X</button></td></tr>`;
             });
         });
     }
