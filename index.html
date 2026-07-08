@@ -5,27 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mashood Kuri Pro</title>
     <style>
-        body { background: #050b07; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
-        .btn { background: #dfb73c; padding: 15px; width: 100%; border: none; border-radius: 10px; margin-top: 10px; font-weight: bold; }
-        .wheel { width: 250px; height: 250px; border: 8px solid #dfb73c; border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        body { font-family: sans-serif; background: #050b07; color: white; margin: 0; padding: 20px; }
+        .card { background: #121e17; padding: 20px; border-radius: 15px; border: 1px solid #dfb73c; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat { background: #000; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #333; }
+        .btn { background: #dfb73c; color: #000; padding: 15px; width: 100%; border: none; border-radius: 10px; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <h2>Mashood Kuri</h2>
-    <div class="wheel" id="wheel">Spin!</div>
-    <button class="btn" onclick="startDraw()">ലക്കി ഡ്രോ ആരംഭിക്കുക 🎲</button>
-    <h3 id="winner"></h3>
+
+    <div id="app">
+        <h2>അഡ്മിൻ ഡാഷ്‌ബോർഡ്</h2>
+        <div class="grid">
+            <div class="stat">മെമ്പർമാർ<br><b>120</b></div>
+            <div class="stat">പിരിവ്<br><b>₹1.2L</b></div>
+        </div>
+        
+        <div class="card">
+            <h3>ലക്കി ഡ്രോ</h3>
+            <button class="btn" onclick="startDraw()">വിജയിയെ കണ്ടെത്തുക 🎲</button>
+            <h3 id="winner"></h3>
+        </div>
+    </div>
 
     <script>
         function startDraw() {
-            const wheel = document.getElementById('wheel');
-            wheel.style.transform = `rotate(${Math.floor(Math.random() * 3600) + 1440}deg)`;
-            wheel.style.transition = "transform 5s ease-out";
+            const winner = document.getElementById('winner');
+            winner.innerText = "🎉 വിജയിയെ തിരഞ്ഞെടുക്കുന്നു...";
             setTimeout(() => {
-                document.getElementById('winner').innerText = "🎉 വിജയി: മെമ്പർ 07 🎉";
-            }, 5000);
+                winner.innerText = "🏆 വിജയി: മെമ്പർ നമ്പർ 45";
+            }, 3000);
         }
     </script>
 </body>
 </html>
-
