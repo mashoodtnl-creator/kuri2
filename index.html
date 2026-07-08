@@ -2,146 +2,149 @@
 <html lang="ml">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Classic Cafe - Bakery Management</title>
-  <link href="https:                                                                             
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https:                                                                                                
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { height: 100%; }
     body {
       min-height: 100%;
-      background:         
+      height: auto;
+      background: #0a1a0a;
       font-family: 'Segoe UI', Arial;
-      color:         
+      color: #e0ffe0;
       overflow-x: hidden;
     }
 
     :root {
-      --card-bg: rgba(45, 13, 0.7);
-      --card-border: rgba(255, 107, 107, 0.3);
-      --primary:         
-      --primary-glow: rgba(255, 107, 107, 0.5);
-      --secondary:         
-      --success:         
-      --danger:         
-      --text-light:         
-      --text-dim:         
+      --card-bg: rgba(13, 45, 13, 0.7);
+      --card-border: rgba(107, 255, 107, 0.3);
+      --primary: #6BCF7F;
+      --primary-glow: rgba(107, 207, 127, 0.5);
+      --secondary: #FFD166;
+      --accent: #4CAF50;
+      --danger: #FF5252;
+      --text-light: #e0ffe0;
+      --text-dim: #99ff99;
     }
 
     body {
-      background: linear-gradient(135deg,                                        
+      background: linear-gradient(135deg, #0a1a0a 0%, #0d2d0d 50%, #0a1a0a 100%);
       background-attachment: fixed;
-      padding: 12px;
+      padding: 10px;
     }
-  .container { max-width: 1600px; margin: 0 auto; }
+ .container { max-width: 1600px; margin: 0 auto; padding-bottom: 20px; }
 
-  .card {
+ .card {
       background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 16px; margin-bottom: 16px;
+      border-radius: 14px; padding: 14px; margin-bottom: 14px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
-  .btn { width: 100%; padding: 11px; margin: 6px 0; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-  .btn.primary { background: linear-gradient(135deg, var(--primary),                                                                      
-  .btn.secondary { background: linear-gradient(135deg, var(--secondary),                            
-  .btn.success { background: linear-gradient(135deg, var(--success),                          
-  .btn.danger { background: linear-gradient(135deg, var(--danger),                          
-  .btn.small { width: auto; padding: 7px 14px; font-size: 12px; margin: 0 4px; }
+ .btn { width: 100%; padding: 10px; margin: 6px 0; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+ .btn.primary { background: linear-gradient(135deg, var(--primary), #4caf50); color: white; box-shadow: 0 4px 20px var(--primary-glow); }
+ .btn.secondary { background: linear-gradient(135deg, var(--secondary), #ffb700); color: #0a1a0a; }
+ .btn.accent { background: linear-gradient(135deg, var(--accent), #388e3c); color: white; }
+ .btn.danger { background: linear-gradient(135deg, var(--danger), #ff1744); color: white; }
+ .btn.small { width: auto; padding: 6px 12px; font-size: 11px; margin: 0 3px; }
 
     input, select, textarea {
-      width: 100%; padding: 11px; margin: 6px 0; border: 1px solid var(--card-border);
-      border-radius: 10px; font-size: 14px; background: rgba(10, 10, 0.6);
+      width: 100%; padding: 10px; margin: 6px 0; border: 1px solid var(--card-border);
+      border-radius: 10px; font-size: 14px; background: rgba(10, 26, 10, 0.6);
       color: var(--text-light); backdrop-filter: blur(10px);
     }
     input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 3px var(--primary-glow); }
 
-  .top-bar {
-      position: sticky; top: 0; background: rgba(26, 10, 10, 0.98); backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border); border-radius: 14px; padding: 12px 16px;
-      margin-bottom: 16px; display: flex; align-items: center; gap: 12px; z-index: 100;
+ .top-bar {
+      position: relative;
+      background: rgba(10, 26, 10, 0.98); backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border); border-radius: 14px; padding: 12px 14px;
+      margin-bottom: 14px; display: flex; align-items: center; gap: 10px; z-index: 100;
+      flex-wrap: wrap;
     }
-  .top-bar h2 { color: var(--primary); font-size: 22px; }
-  .top-bar.btn-group { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
-  .top-bar.btn { width: auto; padding: 7px 14px; margin: 0; }
+ .top-bar h2 { color: var(--primary); font-size: 20px; }
+ .top-bar.btn-group { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
 
-  .tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-  .tab-btn {
-      padding: 10px 20px; border: 1px solid var(--card-border); background: var(--card-bg);
-      color: var(--text-dim); border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.3s; font-size: 14px;
+ .tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; overflow-x: auto; }
+ .tab-btn {
+      padding: 9px 16px; border: 1px solid var(--card-border); background: var(--card-bg);
+      color: var(--text-dim); border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.3s; font-size: 13px; white-space: nowrap;
     }
-  .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 20px var(--primary-glow); }
+ .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 20px var(--primary-glow); }
 
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
-  .stat-card {
+ .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+    @media (min-width: 768px) {
+.stats-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+ .stat-card {
       background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 16px; text-align: center; position: relative; overflow: hidden;
+      border-radius: 14px; padding: 14px; text-align: center; position: relative; overflow: hidden;
     }
-  .stat-card::before {
+ .stat-card::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
       background: linear-gradient(90deg, transparent, var(--primary), transparent);
     }
-  .stat-card i { font-size: 28px; color: var(--primary); margin-bottom: 6px; }
-  .stat-card h2 { font-size: 24px; color: var(--primary); margin: 4px 0; }
-  .stat-card p { color: var(--text-dim); font-size: 11px; }
+ .stat-card i { font-size: 24px; color: var(--primary); margin-bottom: 4px; }
+ .stat-card h2 { font-size: 22px; color: var(--primary); margin: 4px 0; }
+ .stat-card p { color: var(--text-dim); font-size: 10px; }
 
-  .table-wrapper { overflow-x: auto; border-radius: 10px; }
-    table { width: 100%; border-collapse: collapse; background: rgba(10, 10, 10, 0.4); }
-    th { background: rgba(255, 107, 107, 0.15); color: var(--primary); padding: 10px; text-align: left; font-weight: 600; border-bottom: 2px solid var(--card-border); font-size: 12px; }
-    td { padding: 10px; border-bottom: 1px solid rgba(255, 107, 107, 0.1); color: var(--text-light); font-size: 12px; }
-    tr:hover { background: rgba(255, 107, 107, 0.05); }
+ .table-wrapper { overflow-x: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; background: rgba(10, 26, 10, 0.4); }
+    th { background: rgba(107, 207, 127, 0.15); color: var(--primary); padding: 9px; text-align: left; font-weight: 600; border-bottom: 2px solid var(--card-border); font-size: 11px; }
+    td { padding: 9px; border-bottom: 1px solid rgba(107, 207, 127, 0.1); color: var(--text-light); font-size: 11px; }
+    tr:hover { background: rgba(107, 207, 127, 0.05); }
 
-  .section-title {
-      display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
-      color: var(--primary); font-size: 16px; font-weight: 600;
+ .section-title {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+      color: var(--primary); font-size: 15px; font-weight: 600;
     }
-  .section-title::before {
-      content: ''; width: 4px; height: 18px; background: var(--primary);
+ .section-title::before {
+      content: ''; width: 3px; height: 16px; background: var(--primary);
       border-radius: 2px; box-shadow: 0 0 10px var(--primary-glow);
     }
 
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+ .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+ .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+ .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
     @media (max-width: 768px) {
-  .grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .tabs { overflow-x: auto; }
-  .top-bar { flex-direction: column; align-items: flex-start; }
-  .top-bar.btn-group { margin-left: 0; width: 100%; }
+.grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; }
+.top-bar { flex-direction: column; align-items: flex-start; }
+.top-bar.btn-group { margin-left: 0; width: 100%; }
     }
 
-  .calc-box {
+ .calc-box {
       background: rgba(255, 209, 102, 0.1);
       border: 2px dashed var(--secondary);
       padding: 12px;
       border-radius: 10px;
       margin: 8px 0;
     }
-  .calc-result {
+ .calc-result {
       font-size: 20px;
       color: var(--primary);
       font-weight: bold;
       text-align: center;
       padding: 12px;
-      background: rgba(255, 107, 107, 0.1);
+      background: rgba(107, 207, 127, 0.1);
       border-radius: 10px;
       margin-top: 8px;
     }
 
-  .modal {
+ .modal {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9);
       z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;
     }
-  .modal.card { max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; }
-  .hidden { display: none!important; }
+ .modal.card { max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; }
+ .hidden { display: none!important; }
 
-  .badge { padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
-  .badge.low { background: rgba(255, 82, 82, 0.2); color: var(--danger); }
-  .badge.ok { background: rgba(107, 207, 127, 0.2); color: var(--success); }
-  .badge.paid { background: rgba(107, 207, 127, 0.2); color: var(--success); }
-  .badge.pending { background: rgba(255, 107, 107, 0.2); color: var(--danger); }
+ .badge { padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+ .badge.low { background: rgba(255, 82, 0.2); color: var(--danger); }
+ .badge.ok { background: rgba(107, 207, 127, 0.2); color: var(--primary); }
+ .badge.paid { background: rgba(107, 207, 127, 0.2); color: var(--primary); }
+ .badge.pending { background: rgba(255, 107, 107, 0.2); color: var(--danger); }
   </style>
 </head>
 <body>
@@ -151,7 +154,7 @@
       <div class="btn-group">
         <button class="btn primary small" onclick="exportPDF('sales')">Sales PDF</button>
         <button class="btn secondary small" onclick="exportPDF('stock')">Stock PDF</button>
-        <button class="btn success small" onclick="exportPDF('profit')">Profit PDF</button>
+        <button class="btn accent small" onclick="exportPDF('profit')">Profit PDF</button>
       </div>
     </div>
 
@@ -193,13 +196,14 @@
         <div class="card">
           <div class="section-title"><i class="ri-line-chart-line"></i><span>Monthly Summary</span></div>
           <div class="grid-3">
-            <div><p style="color:var(--text-dim)">Total Sales</p><h3 id="monthSales" style="color:var(--success)">₹0</h3></div>
-            <div><p style="color:var(--text-dim)">Total Expense</p><h3 id="monthExpense" style="color:var(--danger)">₹0</h3></div>
-            <div><p style="color:var(--text-dim)">Net Profit</p><h3 id="monthProfit" style="color:var(--primary)">₹0</h3></div>
+            <div><p style="color:var(--text-dim); font-size:11px;">Total Sales</p><h3 id="monthSales" style="color:var(--primary); font-size:18px;">₹0</h3></div>
+            <div><p style="color:var(--text-dim); font-size:11px;">Total Expense</p><h3 id="monthExpense" style="color:var(--danger); font-size:18px;">₹0</h3></div>
+            <div><p style="color:var(--text-dim); font-size:11px;">Net Profit</p><h3 id="monthProfit" style="color:var(--accent); font-size:18px;">₹0</h3></div>
           </div>
+        </div>
         <div class="card">
           <div class="section-title"><i class="ri-pie-chart-line"></i><span>Top Selling Items</span></div>
-          <div id="topItems"></div>
+          <div id="topItems" style="font-size:13px;"></div>
         </div>
       </div>
     </div>
@@ -217,8 +221,8 @@
           </div>
           <button class="btn primary" onclick="addToBill()">Add to Bill</button>
 
-          <div style="margin-top:16px;">
-            <h4 style="color:var(--primary); margin-bottom:8px;">Quick Items</h4>
+          <div style="margin-top:14px;">
+            <h4 style="color:var(--primary); margin-bottom:8px; font-size:14px;">Quick Items</h4>
             <div id="quickItems" style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;"></div>
           </div>
         </div>
@@ -227,10 +231,10 @@
           <div class="section-title"><i class="ri-bill-line"></i><span>Current Bill</span></div>
           <input type="text" id="customerName" placeholder="Customer Name (Optional)">
           <input type="tel" id="customerPhone" placeholder="Customer Phone (Optional)">
-          <div id="billItems" style="min-height:150px; max-height:250px; overflow-y:auto;"></div>
-          <div style="font-size:22px; color:var(--primary); font-weight:bold; text-align:right; padding:12px;">Total: ₹<span id="billTotal">0</span></div>
+          <div id="billItems" style="min-height:120px; max-height:200px; overflow-y:auto; font-size:13px;"></div>
+          <div style="font-size:20px; color:var(--primary); font-weight:bold; text-align:right; padding:10px;">Total: ₹<span id="billTotal">0</span></div>
           <div class="grid-2">
-            <button class="btn success" onclick="saveBill()">Save Bill</button>
+            <button class="btn accent" onclick="saveBill()">Save Bill</button>
             <button class="btn primary" onclick="printBill()">Print Bill</button>
           </div>
           <button class="btn secondary" onclick="clearBill()">Clear Bill</button>
@@ -454,7 +458,6 @@
     let currentBill = [];
     let currentDate = new Date().toISOString().slice(0,10);
 
-           
     (function init() {
       document.getElementById('expDate').value = currentDate;
       document.getElementById('reportFrom').value = currentDate;
@@ -480,7 +483,6 @@
       if(tab === 'staff') renderStaffTable();
     }
 
-                
     function updateDashboard() {
       const today = new Date().toISOString().slice(0,10);
       const todayBills = db.bills.filter(b => b.date === today);
@@ -514,13 +516,12 @@
       });
       const topItems = Object.entries(itemSales).sort((a,b) => b[1] - a[1]).slice(0,5);
       document.getElementById('topItems').innerHTML = topItems.map(([name, qty]) =>
-        `<div style="padding:8px; border-bottom:1px solid var(--card-border); display:flex; justify-content:space-between;">
+        `<div style="padding:6px; border-bottom:1px solid var(--card-border); display:flex; justify-content:space-between; font-size:12px;">
           <span>${name}</span><span style="color:var(--primary);">${qty} sold</span>
         </div>`
-      ).join('') || '<p style="color:var(--text-dim); text-align:center;">No sales yet</p>';
+      ).join('') || '<p style="color:var(--text-dim); text-align:center; font-size:12px;">No sales yet</p>';
     }
 
-              
     function loadItems() {
       const select = document.getElementById('billItem');
       select.innerHTML = '<option value="">-- Select Item --</option>' +
@@ -530,7 +531,7 @@
     function loadQuickItems() {
       const div = document.getElementById('quickItems');
       div.innerHTML = db.items.slice(0,9).map(i =>
-        `<button class="btn small" style="background:rgba(255,107,107,0.2); color:var(--primary); border:1px solid var(--primary);" onclick="quickAdd(${i.id})">${i.name}<br>₹${i.sellRate}</button>`
+        `<button class="btn small" style="background:rgba(107,207,127,0.2); color:var(--primary); border:1px solid var(--primary); font-size:11px;" onclick="quickAdd(${i.id})">${i.name}<br>₹${i.sellRate}</button>`
       ).join('');
     }
 
@@ -575,13 +576,13 @@
     function renderBill() {
       const div = document.getElementById('billItems');
       if(currentBill.length === 0) {
-        div.innerHTML = '<p style="color:var(--text-dim); text-align:center; padding:20px;">No items added</p>';
+        div.innerHTML = '<p style="color:var(--text-dim); text-align:center; padding:20px; font-size:12px;">No items added</p>';
         document.getElementById('billTotal').textContent = '0';
         return;
       }
 
       div.innerHTML = currentBill.map((item, idx) => `
-        <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px dashed var(--card-border);">
+        <div style="display:flex; justify-content:space-between; padding:8px; border-bottom:1px dashed var(--card-border); font-size:12px;">
           <span>${item.name} x ${item.qty} @ ₹${item.rate}</span>
           <span>₹${(item.qty * item.rate).toFixed(2)} <button onclick="removeBillItem(${idx})" style="background:none; border:none; color:var(--danger); cursor:pointer;">✕</button></span>
         </div>
@@ -617,7 +618,7 @@
       db.bills.push(bill);
       saveDB();
 
-      alert(`Bill                          
+      alert(`Bill #${bill.billNo} saved!`);
       clearBill();
       updateDashboard();
       loadItems();
@@ -641,10 +642,10 @@
         <head><title>Bill - Classic Cafe</title>
         <style>
           body { font-family: Arial; padding: 20px; }
-          h1 { text-align: center; color:           
+          h1 { text-align: center; color: #6BCF7F; }
           table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-          th, td { padding: 8px; text-align: left; border-bottom: 1px solid        
-     .total { text-align: right; font-size: 20px; font-weight: bold; }
+          th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
+   .total { text-align: right; font-size: 20px; font-weight: bold; }
         </style>
         </head>
         <body>
@@ -664,14 +665,9 @@
       win.print();
     }
 
-    // STOCK
     function addStock() {
       const name = document.getElementById('stockItemName').value.trim();
       const qty = parseInt(document.getElementById('stockQty').value);
       const rate = parseFloat(document.getElementById('stockRate').value);
       const sellRate = parseFloat(document.getElementById('stockSellRate').value);
-      const minStock = parseInt(document.getElementById('stockMinQty').value) || 10;
-
-      if(!name ||!qty ||!rate ||!sellRate) return alert('Fill all fields!');
-
-      const existing = db.items.find(i => i.name.to
+      const minStock = parseInt(document.getElementBy
