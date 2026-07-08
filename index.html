@@ -1,191 +1,211 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Classic Cafe - Bakery Management</title>
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { height: auto; }
-    body {
-      background: #0a1a0a;
-      font-family: 'Segoe UI', Arial;
-      color: #e0ffe0;
-      overflow-x: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classic Cafe Dashboard</title>
 
-    :root {
-      --card-bg: rgba(13, 45, 13, 0.85);
-      --card-border: rgba(107, 207, 127, 0.4);
-      --primary: #6BCF7F;
-      --primary-glow: rgba(107, 207, 127, 0.5);
-      --secondary: #FFD166;
-      --accent: #4CAF50;
-      --danger: #FF5252;
-      --text-light: #e0ffe0;
-      --text-dim: #99ff99;
-    }
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f4f4;
+}
 
-    body {
-      background: linear-gradient(135deg, #0a1a0a 0%, #0d2d0d 50%, #0a1a0a 100%);
-      padding: 8px;
-    }
- .container { max-width: 1600px; margin: 0 auto; }
+header{
+    background:#6b3e26;
+    color:white;
+    padding:15px;
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+}
 
- .card {
-      background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border);
-      border-radius: 12px; padding: 12px; margin-bottom: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-    }
+.container{
+    padding:15px;
+}
 
- .btn { width: 100%; padding: 10px; margin: 5px 0; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
- .btn.primary { background: linear-gradient(135deg, var(--primary), #4caf50); color: white; box-shadow: 0 2px 10px var(--primary-glow); }
- .btn.secondary { background: linear-gradient(135deg, var(--secondary), #ffb700); color: #0a1a0a; }
- .btn.accent { background: linear-gradient(135deg, var(--accent), #388e3c); color: white; }
- .btn.danger { background: linear-gradient(135deg, var(--danger), #ff1744); color: white; }
- .btn.small { width: auto; padding: 5px 10px; font-size: 11px; margin: 0 2px; }
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:10px;
+}
 
-    input, select, textarea {
-      width: 100%; padding: 9px; margin: 5px 0; border: 1px solid var(--card-border);
-      border-radius: 8px; font-size: 13px; background: rgba(10, 26, 10, 0.7);
-      color: var(--text-light);
-    }
-    input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 3px var(--primary-glow); }
+.card{
+    background:white;
+    border-radius:10px;
+    padding:15px;
+    text-align:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.2);
+}
 
- .top-bar {
-      background: rgba(10, 26, 10, 0.95);
-      border: 1px solid var(--card-border); border-radius: 12px; padding: 10px 12px;
-      margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
-      flex-wrap: wrap;
-    }
- .top-bar h2 { color: var(--primary); font-size: 18px; }
- .top-bar.btn-group { margin-left: auto; display: flex; gap: 5px; flex-wrap: wrap; }
+.card h3{
+    margin:0;
+    color:#555;
+}
 
- .tabs { display: flex; gap: 5px; margin-bottom: 12px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 5px; }
- .tab-btn {
-      padding: 8px 14px; border: 1px solid var(--card-border); background: var(--card-bg);
-      color: var(--text-dim); border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; font-size: 12px; white-space: nowrap;
-    }
- .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 2px 10px var(--primary-glow); }
+.card p{
+    font-size:22px;
+    font-weight:bold;
+    color:#6b3e26;
+}
 
- .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
-    @media (min-width: 768px) {
-.stats-grid { grid-template-columns: repeat(4, 1fr); }
-    }
- .stat-card {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 12px; padding: 12px; text-align: center; position: relative; overflow: hidden;
-    }
- .stat-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, transparent, var(--primary), transparent);
-    }
- .stat-card i { font-size: 22px; color: var(--primary); margin-bottom: 3px; }
- .stat-card h2 { font-size: 20px; color: var(--primary); margin: 3px 0; }
- .stat-card p { color: var(--text-dim); font-size: 10px; }
+.section{
+    background:white;
+    margin-top:15px;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 2px 5px rgba(0,0,0,.2);
+}
 
- .table-wrapper { overflow-x: auto; border-radius: 8px; }
-    table { width: 100%; border-collapse: collapse; background: rgba(10, 26, 10, 0.4); }
-    th { background: rgba(107, 207, 127, 0.15); color: var(--primary); padding: 8px; text-align: left; font-weight: 600; border-bottom: 2px solid var(--card-border); font-size: 11px; }
-    td { padding: 8px; border-bottom: 1px solid rgba(107, 207, 127, 0.1); color: var(--text-light); font-size: 11px; }
-    tr:hover { background: rgba(107, 207, 127, 0.05); }
+input,button{
+    width:100%;
+    padding:10px;
+    margin-top:8px;
+    box-sizing:border-box;
+}
 
- .section-title {
-      display: flex; align-items: center; gap: 6px; margin-bottom: 8px;
-      color: var(--primary); font-size: 14px; font-weight: 600;
-    }
- .section-title::before {
-      content: ''; width: 3px; height: 14px; background: var(--primary);
-      border-radius: 2px; box-shadow: 0 0 10px var(--primary-glow);
-    }
+button{
+    background:#6b3e26;
+    color:white;
+    border:none;
+    border-radius:5px;
+}
 
- .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
- .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
- .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    @media (max-width: 768px) {
-.grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; }
-.top-bar { flex-direction: column; align-items: flex-start; }
-.top-bar.btn-group { margin-left: 0; width: 100%; }
-    }
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
 
- .calc-box {
-      background: rgba(255, 209, 102, 0.1);
-      border: 2px dashed var(--secondary);
-      padding: 10px;
-      border-radius: 8px;
-      margin: 6px 0;
-    }
- .calc-result {
-      font-size: 18px;
-      color: var(--primary);
-      font-weight: bold;
-      text-align: center;
-      padding: 10px;
-      background: rgba(107, 207, 127, 0.1);
-      border-radius: 8px;
-      margin-top: 6px;
-    }
+th,td{
+    border:1px solid #ddd;
+    padding:8px;
+    text-align:center;
+}
 
- .modal {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9);
-      z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;
-    }
- .modal.card { max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; }
- .hidden { display: none!important; }
-
- .badge { padding: 2px 6px; border-radius: 8px; font-size: 9px; font-weight: 600; }
- .badge.low { background: rgba(255, 82, 82, 0.2); color: var(--danger); }
- .badge.ok { background: rgba(107, 207, 127, 0.2); color: var(--primary); }
- .badge.paid { background: rgba(107, 207, 127, 0.2); color: var(--primary); }
- .badge.pending { background: rgba(255, 107, 0.2); color: var(--danger); }
-  </style>
+th{
+    background:#6b3e26;
+    color:white;
+}
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="top-bar">
-      <h2><i class="ri-cup-line"></i> Classic Cafe</h2>
-      <div class="btn-group">
-        <button class="btn primary small" onclick="exportPDF('sales')">Sales PDF</button>
-        <button class="btn secondary small" onclick="exportPDF('stock')">Stock PDF</button>
-        <button class="btn accent small" onclick="exportPDF('profit')">Profit PDF</button>
-      </div>
-    </div>
 
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('dashboard', event)">Dashboard</button>
-      <button class="tab-btn" onclick="switchTab('billing', event)">Billing</button>
-      <button class="tab-btn" onclick="switchTab('stock', event)">Stock</button>
-      <button class="tab-btn" onclick="switchTab('expense', event)">Expense</button>
-      <button class="tab-btn" onclick="switchTab('staff', event)">Staff</button>
-      <button class="tab-btn" onclick="switchTab('calculator', event)">Calculator</button>
-      <button class="tab-btn" onclick="switchTab('report', event)">Reports</button>
-    </div>
+<header>
+☕ Classic Cafe Dashboard
+</header>
 
-    <div id="tab-dashboard" class="tab-content">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <i class="ri-money-rupee-circle-fill"></i>
-          <h2 id="todaySales">₹0</h2>
-          <p>ഇന്നത്തെ Sale</p>
-        </div>
-        <div class="stat-card">
-          <i class="ri-arrow-down-circle-fill"></i>
-          <h2 id="todayExpense">₹0</h2>
-          <p>ഇന്നത്തെ Expense</p>
-        </div>
-        <div class="stat-card">
-          <i class="ri-funds-line"></i>
-          <h2 id="todayProfit">₹0</h2>
-          <p>ഇന്നത്തെ Profit</p>
-        </div>
-        <div class="stat-card">
-          <i class="ri-alert-line"></i>
-          <h2 id="lowStock">0</h2>
-          <p>Low Stock Items</p>
-        </div>
-      </div>
+<div class="container">
 
-      <div class="
+<div class="cards">
+
+<div class="card">
+<h3>Total Sales</h3>
+<p id="sales">₹0</p>
+</div>
+
+<div class="card">
+<h3>Expenses</h3>
+<p id="expense">₹0</p>
+</div>
+
+<div class="card">
+<h3>Cash Balance</h3>
+<p id="cash">₹0</p>
+</div>
+
+<div class="card">
+<h3>Paytm Balance</h3>
+<p id="paytm">₹0</p>
+</div>
+
+<div class="card">
+<h3>Profit</h3>
+<p id="profit">₹0</p>
+</div>
+
+</div>
+
+<!-- Sales Entry -->
+
+<div class="section">
+<h2>Sales Entry</h2>
+
+<input type="number" id="saleInput" placeholder="Enter Sale Amount">
+
+<button onclick="addSale()">
+Add Sale
+</button>
+</div>
+
+<!-- Expense Entry -->
+
+<div class="section">
+<h2>Expense Entry</h2>
+
+<input type="number" id="expenseInput" placeholder="Enter Expense Amount">
+
+<button onclick="addExpense()">
+Add Expense
+</button>
+</div>
+
+<!-- Stock -->
+
+<div class="section">
+<h2>Stock List</h2>
+
+<input type="text" id="stockName" placeholder="Item Name">
+
+<input type="number" id="stockQty" placeholder="Quantity">
+
+<button onclick="addStock()">
+Add Stock
+</button>
+
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Qty</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody id="stockTable">
+</tbody>
+
+</table>
+</div>
+
+<!-- Staff -->
+
+<div class="section">
+<h2>Staff Management</h2>
+
+<input type="text" id="staffName" placeholder="Staff Name">
+
+<input type="number" id="staffSalary" placeholder="Salary">
+
+<button onclick="addStaff()">
+Add Staff
+</button>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Salary</th>
+</tr>
+</thead>
+
+<tbody id="staffTable">
+</tbody>
+
+</table>
+
+</div>
+
+<script>
