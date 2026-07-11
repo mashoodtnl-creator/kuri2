@@ -3,130 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Classic Cafe · Premium Sales</title>
+    <title>Classic Cafe Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root {
-            --gold: #C5A059;
-            --gold-light: #F3E5AB;
-            --gold-dark: #9C7C38;
-            --green: #1B5E20;
-            --green-light: #2E7D32;
-            --cream: #FDFBF7;
-            --shadow: 0 12px 40px rgba(0,0,0,0.06);
-        }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--cream); color: #2c3e2f; padding: 20px; min-height: 100vh; }
-        .app-container { max-width: 1280px; margin: 0 auto; }
-
+        body {
+            background: #f4ebe6;
+            color: #3e2723;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .app-container { max-width: 1200px; margin: 0 auto; }
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 24px; background: var(--green); border-radius: 20px;
-            margin-bottom: 28px; flex-wrap: wrap; gap: 15px;
-            box-shadow: 0 6px 20px rgba(27,94,32,0.25); border: 1px solid var(--gold);
+            padding: 10px 0 20px 0; border-bottom: 3px solid #a1887f;
+            margin-bottom: 25px; flex-wrap: wrap; gap: 15px;
         }
         .header h1 {
             font-family: 'Playfair Display', serif; font-weight: 700; font-style: italic;
-            color: var(--gold-light); font-size: 2.4rem; text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            color: #4e342e; font-size: 2.4rem; text-shadow: 2px 2px 0 rgba(161, 136, 127, 0.3);
         }
-        .header h1 span { color: #fff; }
         .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
         .btn {
-            padding: 10px 24px; border: none; border-radius: 60px; font-weight: 600;
-            font-size: 0.9rem; cursor: pointer; transition: all 0.25s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: inline-flex; align-items: center; gap: 6px;
+            padding: 10px 20px; border: none; border-radius: 40px; font-weight: 600; font-size: 0.9rem;
+            cursor: pointer; transition: 0.2s; background: #6d4c41; color: white; box-shadow: 0 3px 8px rgba(0,0,0,0.1);
         }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.15); }
         .btn:active { transform: scale(0.96); }
-        .btn-gold { background: var(--gold); color: #1e2b1c; }
-        .btn-gold:hover { background: var(--gold-dark); color: #fff; }
-        .btn-green { background: var(--green-light); color: #fff; }
-        .btn-green:hover { background: var(--green); }
-        .btn-outline { background: transparent; border: 2px solid var(--gold); color: var(--gold); }
-        .btn-outline:hover { background: var(--gold); color: #1e2b1c; }
-        .btn-danger { background: #b71c1c; color: #fff; }
+        .btn-gold { background: #b8860b; color: #fff; }
+        .btn-outline { background: transparent; border: 2px solid #6d4c41; color: #6d4c41; }
+        .btn-outline:hover { background: #6d4c41; color: #fff; }
+        .btn-danger { background: #a52a2a; }
+        .btn-success { background: #2e7d32; }
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
 
         .tabs {
-            display: flex; gap: 6px; margin-bottom: 28px; background: #fff; padding: 8px;
-            border-radius: 60px; box-shadow: var(--shadow); flex-wrap: wrap;
-            border: 1px solid rgba(197,160,89,0.2);
+            display: flex; gap: 8px; margin-bottom: 25px; background: #d7ccc8;
+            padding: 8px; border-radius: 60px; flex-wrap: wrap;
         }
         .tab-btn {
             padding: 10px 24px; border: none; border-radius: 40px; font-weight: 600;
-            background: transparent; color: #3e4a3b; cursor: pointer; transition: 0.2s; font-size: 0.95rem;
+            background: transparent; color: #4e342e; cursor: pointer; transition: 0.2s; font-size: 0.95rem;
         }
-        .tab-btn.active { background: var(--green); color: var(--gold-light); box-shadow: 0 4px 12px rgba(27,94,32,0.3); }
-        .tab-btn:hover:not(.active) { background: rgba(197,160,89,0.1); }
-        .tab-content { display: none; animation: fadeUp 0.45s ease; }
-        .tab-content.active { display: block; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-btn.active { background: #4e342e; color: #f4ebe6; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .tab-btn:hover:not(.active) { background: rgba(78, 52, 46, 0.1); }
 
-        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+        .tab-content { display: none; animation: fadeUp 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+
         .stat-card {
-            background: #fff; padding: 20px 18px; border-radius: 24px; box-shadow: var(--shadow);
-            border-left: 6px solid var(--gold); transition: 0.25s;
+            background: white; padding: 18px 16px; border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.04); border-left: 6px solid #8d6e63;
+            transition: 0.2s;
         }
-        .stat-card:hover { box-shadow: 0 16px 40px rgba(0,0,0,0.08); }
-        .stat-card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #6d7a68; font-weight: 700; }
+        .stat-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .stat-card .label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #795548; font-weight: 600; }
         .stat-card .value {
-            font-size: 1.8rem; font-weight: 700; color: #1b2e1b; margin-top: 4px;
+            font-size: 1.8rem; font-weight: 700; color: #3e2723; margin-top: 4px;
             display: flex; align-items: center; gap: 8px;
         }
         .stat-card .value input {
-            font-size: 1.8rem; font-weight: 700; border: none; border-bottom: 2px dashed var(--gold-light);
-            background: transparent; width: 130px; color: #1b2e1b; outline: none; padding: 0 4px;
+            font-size: 1.8rem; font-weight: 700; border: none; border-bottom: 2px dashed #bcaaa4;
+            background: transparent; width: 120px; color: #3e2723; outline: none; padding: 0 4px;
         }
-        .stat-card .value input:focus { border-bottom-color: var(--gold); }
+        .stat-card .value input:focus { border-bottom-color: #6d4c41; }
+        .stat-card .sub { font-size: 0.9rem; color: #8d6e63; margin-top: 4px; }
 
         .table-wrapper {
-            background: #fff; border-radius: 28px; padding: 24px; box-shadow: var(--shadow);
-            overflow-x: auto; border: 1px solid rgba(197,160,89,0.15);
+            background: white; border-radius: 24px; padding: 20px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.04); overflow-x: auto;
         }
-        .table-wrapper h3 { font-family: 'Playfair Display', serif; color: var(--green); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 14px 10px; color: #2c3e2f; font-weight: 700; border-bottom: 2px solid var(--gold-light); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        td { padding: 14px 10px; border-bottom: 1px solid #f0ebe0; vertical-align: middle; }
-
+        th { text-align: left; padding: 12px 8px; color: #5d4037; font-weight: 600; border-bottom: 2px solid #d7ccc8; }
+        td { padding: 12px 8px; border-bottom: 1px solid #efebe9; vertical-align: middle; }
         .form-inline {
-            display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; align-items: center;
-            background: #f8f6f0; padding: 16px 18px; border-radius: 60px;
+            display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center;
         }
         .form-inline input, .form-inline select {
-            padding: 12px 18px; border-radius: 40px; border: 1px solid #e0d6c8;
-            background: #fff; flex: 1; min-width: 120px; font-size: 0.95rem;
+            padding: 10px 16px; border-radius: 40px; border: 1px solid #d7ccc8;
+            background: #fff; flex: 1; min-width: 120px;
         }
-        .form-inline input:focus, .form-inline select:focus { outline: 2px solid var(--gold); border-color: transparent; }
-        .delete-btn { background: none; border: none; color: #b71c1c; font-weight: bold; cursor: pointer; font-size: 1.2rem; padding: 0 8px; }
+        .form-inline input:focus, .form-inline select:focus { outline: 2px solid #8d6e63; border-color: transparent; }
+        .delete-btn { background: none; border: none; color: #a52a2a; font-weight: bold; cursor: pointer; font-size: 1.2rem; padding: 0 6px; }
         .delete-btn:hover { color: #ff0000; }
-        .badge-gold { background: var(--gold-light); color: #4a3c1a; padding: 2px 12px; border-radius: 30px; font-size: 0.8rem; font-weight: 600; }
 
         .report-box {
-            background: #fff; border-radius: 28px; padding: 28px; margin-bottom: 24px;
-            box-shadow: var(--shadow); border: 1px solid rgba(197,160,89,0.15);
+            background: white; border-radius: 24px; padding: 24px; margin-bottom: 20px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.04);
         }
-        .report-box h3 { font-family: 'Playfair Display', serif; color: var(--green); margin-bottom: 16px; }
-        .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .report-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0ebe0; }
-        .report-summary { background: var(--green); color: #fff; padding: 16px; border-radius: 16px; margin-top: 16px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+        .report-box h3 { font-family: 'Playfair Display', serif; margin-bottom: 12px; color: #4e342e; }
+        .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .report-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #efebe9; }
 
-        .attendance-btn { padding: 4px 12px; border-radius: 30px; border: none; font-weight: 600; cursor: pointer; font-size: 0.8rem; }
-        .attendance-btn.present { background: var(--green-light); color: #fff; }
-        .attendance-btn.absent { background: #b71c1c; color: #fff; }
-
-        /* PDF hidden but renderable */
-        .pdf-template {
-            position: absolute; left: -9999px; top: 0; width: 1000px;
-            background: #fff; padding: 40px; font-family: 'Inter', sans-serif;
-            z-index: -1;
+        .backup-section {
+            margin-top: 30px; padding-top: 20px; border-top: 2px solid #d7ccc8;
+            display: flex; gap: 15px; flex-wrap: wrap;
         }
+
+        .date-selector {
+            background: #fff; padding: 16px 20px; border-radius: 60px;
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+        .date-selector label { font-weight: 700; color: #4e342e; }
+        .date-selector input[type="date"] {
+            padding: 10px 16px; border-radius: 40px; border: 1px solid #d7ccc8;
+            font-size: 1rem; background: #fff;
+        }
+        .date-selector input[type="date"]:focus { outline: 2px solid #8d6e63; border-color: transparent; }
+        .date-selector .btn { width: auto; padding: 8px 24px; }
 
         @media (max-width: 600px) {
             .header h1 { font-size: 1.8rem; }
             .grid-4 { grid-template-columns: 1fr 1fr; }
-            .report-grid { grid-template-columns: 1fr; }
-            .form-inline { border-radius: 24px; padding: 16px; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .tabs { gap: 4px; padding: 6px; border-radius: 30px; }
+            .tab-btn { padding: 8px 12px; font-size: 0.8rem; }
+            .stat-card .value { font-size: 1.4rem; }
+            .stat-card .value input { font-size: 1.4rem; width: 80px; }
+            .date-selector { border-radius: 30px; }
         }
     </style>
 </head>
@@ -134,279 +133,262 @@
 <div class="app-container">
     <!-- Header -->
     <div class="header">
-        <h1>☕ Classic <span>Cafe</span></h1>
+        <h1>☕ Classic Cafe</h1>
         <div class="header-actions">
-            <button class="btn btn-gold" onclick="exportBackup()">📥 Backup</button>
+            <button class="btn btn-gold" onclick="exportData()">📥 Backup (.json)</button>
             <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">📤 Restore</button>
-            <input type="file" id="fileInput" accept=".json" style="display:none" onchange="importBackup(event)">
+            <input type="file" id="fileInput" accept=".json" style="display:none" onchange="importData(event)">
         </div>
     </div>
 
     <!-- Tabs -->
     <div class="tabs">
         <button class="tab-btn active" data-tab="dashboard">📊 Dashboard</button>
-        <button class="tab-btn" data-tab="staff">👥 Staff & HR</button>
         <button class="tab-btn" data-tab="stock">📦 Stock</button>
-        <button class="tab-btn" data-tab="reports">📈 Reports & Sales</button>
+        <button class="tab-btn" data-tab="staff">👥 Staff</button>
+        <button class="tab-btn" data-tab="reports">📈 Reports</button>
     </div>
 
     <!-- DASHBOARD -->
     <div id="tab-dashboard" class="tab-content active">
-        <div class="grid-4" id="statsContainer"></div>
-        <div style="margin-top: 24px; display: flex; gap: 15px; flex-wrap: wrap;">
-            <button class="btn btn-green" onclick="resetDaily()">🔄 Reset Today</button>
-            <button class="btn btn-gold" onclick="saveTodayReport()">💾 Save Daily Report</button>
+        <!-- Date Selector -->
+        <div class="date-selector">
+            <label>📅 തീയതി:</label>
+            <input type="date" id="reportDate">
+            <button class="btn btn-sm btn-success" onclick="loadDateData()">📂 കാണുക</button>
+            <button class="btn btn-sm btn-gold" onclick="saveDateData()">💾 സേവ് ചെയ്യുക</button>
+            <span style="color:#795548; font-size:0.9rem; margin-left:8px;">(ഏത് തീയതിയിലെ ഡാറ്റയും ചേർക്കാം/എഡിറ്റ് ചെയ്യാം)</span>
         </div>
-    </div>
 
-    <!-- STAFF & HR -->
-    <div id="tab-staff" class="tab-content">
-        <div class="grid-4" id="hrSummary" style="margin-bottom:20px;"></div>
-        <div class="table-wrapper">
-            <h3>👥 Staff Management & Salary</h3>
-            <div class="form-inline">
-                <input type="text" id="staffName" placeholder="Full Name">
-                <input type="text" id="staffRole" placeholder="Role">
-                <input type="text" id="staffPhone" placeholder="Phone">
-                <select id="staffSalaryType"><option>Monthly</option><option>Weekly</option><option>Daily</option></select>
-                <input type="number" id="staffSalaryAmt" placeholder="Salary" step="0.01">
-                <input type="number" id="staffAdvance" placeholder="Advance" step="0.01" value="0">
-                <input type="number" id="staffHours" placeholder="Hrs/Day" value="8">
-                <button class="btn btn-green" onclick="addStaff()">+ Add</button>
-            </div>
-            <table>
-                <thead><tr><th>#</th><th>Name</th><th>Role</th><th>Type</th><th>Salary</th><th>Advance</th><th>Hrs</th><th>Attendance</th><th>Action</th></tr></thead>
-                <tbody id="staffTableBody"></tbody>
-            </table>
+        <div class="grid-4" id="statsContainer">
+            <!-- Cards will be rendered by JS -->
         </div>
-        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
-            <button class="btn btn-gold" onclick="exportHRPDF()">📄 Export HR PDF</button>
-            <button class="btn btn-gold" onclick="shareHRPDF()">📤 Share HR PDF</button>
+        <div style="margin-top: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
+            <button class="btn btn-success" onclick="resetDaily()">🔄 Reset Today (Keep masters)</button>
+            <button class="btn btn-outline" onclick="loadDateData()">📂 Refresh</button>
         </div>
     </div>
 
     <!-- STOCK -->
     <div id="tab-stock" class="tab-content">
         <div class="table-wrapper">
-            <h3>📦 Stock Items</h3>
+            <h3 style="margin-bottom:16px;">📦 Stock Items</h3>
             <div class="form-inline">
                 <input type="text" id="stockName" placeholder="Item Name">
                 <input type="number" id="stockQty" placeholder="Qty">
                 <input type="number" id="stockPrice" placeholder="Price">
-                <button class="btn btn-green" onclick="addStock()">+ Add</button>
+                <button class="btn btn-success" onclick="addStock()">+ Add</button>
             </div>
-            <table><thead><tr><th>#</th><th>Name</th><th>Qty</th><th>Price</th><th>Action</th></tr></thead><tbody id="stockTableBody"></tbody></table>
+            <table>
+                <thead><tr><th>#</th><th>Name</th><th>Qty</th><th>Price</th><th>Action</th></tr></thead>
+                <tbody id="stockTableBody"></tbody>
+            </table>
         </div>
     </div>
 
-    <!-- REPORTS & SALES -->
+    <!-- STAFF -->
+    <div id="tab-staff" class="tab-content">
+        <div class="table-wrapper">
+            <h3 style="margin-bottom:16px;">👥 Staff Management</h3>
+            <div class="form-inline">
+                <input type="text" id="staffName" placeholder="Full Name">
+                <input type="text" id="staffRole" placeholder="Role">
+                <input type="text" id="staffPhone" placeholder="Phone">
+                <button class="btn btn-success" onclick="addStaff()">+ Add</button>
+            </div>
+            <table>
+                <thead><tr><th>#</th><th>Name</th><th>Role</th><th>Phone</th><th>Action</th></tr></thead>
+                <tbody id="staffTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- REPORTS -->
     <div id="tab-reports" class="tab-content">
-        <!-- Sales PDF Actions -->
         <div class="report-box">
-            <h3>📊 Generate Sales Reports (PDF)</h3>
-            <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                <button class="btn btn-gold" onclick="generateDayPDF()">📄 Day Report (Today)</button>
-                <button class="btn btn-gold" onclick="generateMonthPDF()">📄 Month Report</button>
-                <button class="btn btn-gold" onclick="generateYearPDF()">📄 Year Report</button>
+            <h3>📋 Daily Report (Selected Date)</h3>
+            <div id="selectedReportContent">
+                <p>Select a date and load.</p>
             </div>
-            <p style="margin-top:8px; color:#6d7a68; font-size:0.85rem;">Month/Year report uses the filters selected below.</p>
         </div>
-
-        <!-- Month Benefit -->
-        <div class="report-box">
-            <h3>📈 Month-wise Benefit (Profit / Loss)</h3>
-            <div id="monthBenefitContainer" style="overflow-x:auto;"></div>
-        </div>
-
-        <!-- Percentage Calculator -->
-        <div class="report-box">
-            <h3>🧮 Percentage Calculator</h3>
-            <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
-                <input type="number" id="pctTotal" placeholder="Total Value" step="any" style="padding:12px 18px; border-radius:40px; border:1px solid #d7ccc8; flex:1; min-width:120px;">
-                <input type="number" id="pctPart" placeholder="Part Value" step="any" style="padding:12px 18px; border-radius:40px; border:1px solid #d7ccc8; flex:1; min-width:120px;">
-                <button class="btn btn-green" onclick="calculatePct()">Calculate</button>
-                <button class="btn btn-outline" onclick="document.getElementById('pctTotal').value=''; document.getElementById('pctPart').value=''; document.getElementById('pctResult').innerHTML='';">Clear</button>
-            </div>
-            <div id="pctResult" style="margin-top:12px; font-weight:700; color:var(--green); font-size:1.4rem;"></div>
-        </div>
-
-        <div class="report-box">
-            <h3>📋 Daily Report (Today)</h3>
-            <div id="todayReportContent"><p>Loading...</p></div>
-        </div>
-
         <div class="report-box">
             <h3>📜 All Saved Reports</h3>
-            <div class="form-inline" style="margin-bottom:16px;">
-                <label style="font-weight:600; margin-right:8px;">📅 Filter:</label>
-                <select id="filterYear" onchange="renderReports()"><option value="">All Years</option></select>
-                <select id="filterMonth" onchange="renderReports()"><option value="">All Months</option></select>
-                <button class="btn btn-outline" onclick="document.getElementById('filterYear').value=''; document.getElementById('filterMonth').value=''; renderReports();">Clear</button>
-            </div>
-            <div id="allReportsList" style="max-height:350px; overflow-y:auto;"></div>
-            <div id="filterSummary" style="margin-top:12px; font-weight:600; color:var(--green);"></div>
+            <div id="allReportsList" style="max-height:300px; overflow-y:auto;"></div>
         </div>
     </div>
 
-    <div style="margin-top:30px; padding-top:16px; border-top:2px solid var(--gold-light); display:flex; gap:20px; flex-wrap:wrap; font-size:0.9rem; color:#6d7a68;">
-        <span>💾 Auto-saved to Local Storage</span><span>|</span>
-        <span>📅 Data persists across sessions</span><span>|</span>
-        <span style="color:var(--gold); font-weight:600;">☕ Premium Edition</span>
+    <!-- Backup Section -->
+    <div class="backup-section">
+        <span style="color:#795548; font-weight:600;">💾 Auto-saved to Local Storage</span>
+        <span style="color:#8d6e63; font-size:0.9rem;">|</span>
+        <span style="color:#8d6e63; font-size:0.9rem;">📅 Data persists across sessions</span>
     </div>
-</div>
-
-<!-- PDF TEMPLATES (hidden but renderable) -->
-<!-- HR PDF Template -->
-<div id="hr-pdf-content" class="pdf-template" style="left:-9999px;">
-    <h1 style="color:#1B5E20; font-family: 'Playfair Display', serif;">☕ Classic Cafe - HR Report</h1>
-    <p style="color:#6d7a68;">Generated: <span id="pdf-date"></span></p>
-    <hr style="border:1px solid var(--gold-light); margin:20px 0;">
-    <h2 style="color:#C5A059;">Staff Details & Salary</h2>
-    <table style="width:100%; border-collapse: collapse;">
-        <thead><tr style="background:#1B5E20; color:#fff;"><th>Name</th><th>Role</th><th>Type</th><th>Salary</th><th>Advance</th><th>Hrs</th><th>Attendance</th></tr></thead>
-        <tbody id="pdf-staff-body"></tbody>
-    </table>
-    <hr style="border:1px solid var(--gold-light); margin:20px 0;">
-    <div style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;">
-        <div><strong>Total Staff:</strong> <span id="pdf-total-staff"></span></div>
-        <div><strong>Total Salary:</strong> ₹<span id="pdf-total-salary"></span></div>
-        <div><strong>Total Advance:</strong> ₹<span id="pdf-total-advance"></span></div>
-        <div><strong>Present Today:</strong> <span id="pdf-total-present"></span></div>
-    </div>
-    <p style="margin-top:30px; color:#6d7a68; text-align:center;">— End of Report —</p>
-</div>
-
-<!-- Sales PDF Template -->
-<div id="sales-pdf-content" class="pdf-template" style="left:-9999px;">
-    <h1 style="color:#1B5E20; font-family: 'Playfair Display', serif;">☕ Classic Cafe - Sales Report</h1>
-    <p style="color:#6d7a68;">Report: <span id="sales-pdf-title"></span></p>
-    <p style="color:#6d7a68; margin-bottom:10px;">Generated: <span id="sales-pdf-date"></span></p>
-    <hr style="border:1px solid var(--gold-light); margin:20px 0;">
-    <div id="sales-pdf-body" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:600px;"></div>
-    <hr style="border:1px solid var(--gold-light); margin:20px 0;">
-    <div style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; background:#f8f6f0; padding:16px; border-radius:16px;">
-        <div><strong>Total Sales:</strong> ₹<span id="sales-pdf-total-sales"></span></div>
-        <div><strong>Total Expenses:</strong> ₹<span id="sales-pdf-total-expenses"></span></div>
-        <div><strong>Net Profit:</strong> ₹<span id="sales-pdf-total-profit"></span></div>
-        <div><strong>Profit %:</strong> <span id="sales-pdf-total-pct"></span>%</div>
-    </div>
-    <p style="margin-top:30px; color:#6d7a68; text-align:center;">— End of Report —</p>
 </div>
 
 <script>
-    // ---------- DATA ----------
+    // ---------- DATA LAYER ----------
     let data = {
-        sales: 0, expenses: 0, cashCollection: 0, paytmCollection: 0, cashBalance: 0, paytmBalance: 0,
-        stock: [], staff: [], reports: []
+        // These will be loaded based on selected date
+        currentDate: new Date().toISOString().split('T')[0],
+        reports: [], // { date, sales, expenses, cash, paytm, cashBalance, paytmBalance }
+        stock: [], // {id, name, qty, price}
+        staff: [] // {id, name, role, phone}
     };
 
+    // Load from localStorage
     function loadData() {
         const saved = localStorage.getItem('cafeData');
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
-                for (let key in parsed) if (data.hasOwnProperty(key)) data[key] = parsed[key];
-                if (!Array.isArray(data.stock)) data.stock = [];
-                if (!Array.isArray(data.staff)) data.staff = [];
-                if (!Array.isArray(data.reports)) data.reports = [];
-                data.staff = data.staff.map(s => { if (!s.attendance) s.attendance = {}; return s; });
-            } catch(e) { console.warn('Load error', e); }
+                if (parsed.reports) data.reports = parsed.reports;
+                if (parsed.stock) data.stock = parsed.stock;
+                if (parsed.staff) data.staff = parsed.staff;
+            } catch (e) { console.warn("Load error", e); }
         }
+        // Initialize default date
+        document.getElementById('reportDate').value = data.currentDate;
+        // If reports array doesn't exist, initialize
+        if (!Array.isArray(data.reports)) data.reports = [];
     }
 
     function saveData() {
         localStorage.setItem('cafeData', JSON.stringify(data));
         renderAll();
+        renderReportsList();
+    }
+
+    // ---------- DATE HANDLING ----------
+    function getDateData(dateStr) {
+        if (!dateStr) dateStr = document.getElementById('reportDate').value || data.currentDate;
+        let report = data.reports.find(r => r.date === dateStr);
+        if (!report) {
+            // Create default empty report for this date
+            report = {
+                date: dateStr,
+                sales: 0,
+                expenses: 0,
+                cash: 0,
+                paytm: 0,
+                cashBalance: 0,
+                paytmBalance: 0
+            };
+            data.reports.push(report);
+            saveData(); // Save immediately so it persists
+        }
+        return report;
+    }
+
+    function loadDateData() {
+        const date = document.getElementById('reportDate').value;
+        if (!date) return alert('ഒരു തീയതി തിരഞ്ഞെടുക്കുക.');
+        data.currentDate = date;
+        const report = getDateData(date);
+        // Populate the dashboard cards with this date's data
+        renderDashboard(report);
+        renderSelectedReport(report);
+        // Update the report list
+        renderReportsList();
+        // Save current date
+        localStorage.setItem('cafeCurrentDate', date);
+    }
+
+    function saveDateData() {
+        const date = document.getElementById('reportDate').value;
+        if (!date) return alert('ഒരു തീയതി തിരഞ്ഞെടുക്കുക.');
+        
+        // Get current values from input fields
+        const sales = parseFloat(document.getElementById('input_sales').value) || 0;
+        const expenses = parseFloat(document.getElementById('input_expenses').value) || 0;
+        const cash = parseFloat(document.getElementById('input_cash').value) || 0;
+        const paytm = parseFloat(document.getElementById('input_paytm').value) || 0;
+        const cashBal = parseFloat(document.getElementById('input_cashBal').value) || 0;
+        const paytmBal = parseFloat(document.getElementById('input_paytmBal').value) || 0;
+
+        // Find or create report
+        let index = data.reports.findIndex(r => r.date === date);
+        if (index === -1) {
+            data.reports.push({ date, sales, expenses, cash, paytm, cashBalance: cashBal, paytmBalance: paytmBal });
+        } else {
+            data.reports[index] = { date, sales, expenses, cash, paytm, cashBalance: cashBal, paytmBalance: paytmBal };
+        }
+        saveData();
+        alert(`✅ ${date} ലെ വിവരങ്ങൾ സേവ് ചെയ്തു!`);
+        loadDateData(); // Refresh view
     }
 
     // ---------- RENDER ----------
     function renderAll() {
-        renderDashboard(); renderStaff(); renderStock(); renderReports(); renderHRSummary(); renderMonthBenefit();
+        // Only render non-dashboard parts (stock, staff, reports list)
+        renderStock();
+        renderStaff();
+        renderReportsList();
+        // Load current date data
+        const currentDate = localStorage.getItem('cafeCurrentDate') || new Date().toISOString().split('T')[0];
+        document.getElementById('reportDate').value = currentDate;
+        loadDateData();
     }
 
-    function renderDashboard() {
+    function renderDashboard(report) {
+        if (!report) {
+            const date = document.getElementById('reportDate').value;
+            report = getDateData(date);
+        }
         const container = document.getElementById('statsContainer');
+        const profit = report.sales - report.expenses;
+        const profitPct = report.sales > 0 ? ((profit / report.sales) * 100) : 0;
+
         const fields = [
-            { key: 'sales', label: '💰 Total Sales' }, { key: 'expenses', label: '💸 Total Expenses' },
-            { key: 'cashCollection', label: '💵 Cash Collection' }, { key: 'paytmCollection', label: '📱 Paytm Collection' },
-            { key: 'cashBalance', label: '🏦 Cash Balance' }, { key: 'paytmBalance', label: '🏦 Paytm Balance' }
+            { key: 'sales', label: '💰 Total Sales', val: report.sales, id: 'input_sales' },
+            { key: 'expenses', label: '💸 Total Expenses', val: report.expenses, id: 'input_expenses' },
+            { key: 'cash', label: '💵 Cash Collection', val: report.cash, id: 'input_cash' },
+            { key: 'paytm', label: '📱 Paytm Collection', val: report.paytm, id: 'input_paytm' },
+            { key: 'cashBal', label: '🏦 Cash Balance', val: report.cashBalance, id: 'input_cashBal' },
+            { key: 'paytmBal', label: '🏦 Paytm Balance', val: report.paytmBalance, id: 'input_paytmBal' }
         ];
-        const profit = data.sales - data.expenses;
-        const profitPct = data.sales > 0 ? ((profit / data.sales) * 100) : 0;
+
         let html = '';
         fields.forEach(f => {
-            const val = data[f.key] || 0;
-            html += `<div class="stat-card"><div class="label">${f.label}</div>
-                <div class="value"><input type="number" value="${val}" step="1" onchange="updateField('${f.key}', this.value)" /></div></div>`;
+            html += `<div class="stat-card">
+                <div class="label">${f.label}</div>
+                <div class="value">
+                    <input type="number" value="${f.val}" step="1" id="${f.id}" />
+                </div>
+            </div>`;
         });
-        html += `<div class="stat-card" style="border-left-color:var(--gold);"><div class="label">📊 Net Profit</div>
-            <div class="value" style="color:var(--gold);">₹ ${profit.toFixed(2)}</div></div>
-            <div class="stat-card" style="border-left-color:var(--gold);"><div class="label">📊 Profit %</div>
-            <div class="value" style="color:var(--gold);">${profitPct.toFixed(1)}%</div></div>`;
+        html += `<div class="stat-card" style="border-left-color:#b8860b;">
+            <div class="label">📊 Net Profit</div>
+            <div class="value" style="color:#b8860b;">₹ ${profit.toFixed(2)}</div>
+        </div>
+        <div class="stat-card" style="border-left-color:#b8860b;">
+            <div class="label">📊 Profit %</div>
+            <div class="value" style="color:#b8860b;">${profitPct.toFixed(1)}%</div>
+        </div>`;
         container.innerHTML = html;
     }
 
-    function updateField(key, val) { data[key] = parseFloat(val) || 0; saveData(); }
-
-    function renderHRSummary() {
-        const total = data.staff.length;
-        const totalSalary = data.staff.reduce((s, m) => s + (parseFloat(m.salaryAmt) || 0), 0);
-        const totalAdvance = data.staff.reduce((s, m) => s + (parseFloat(m.advance) || 0), 0);
-        const today = new Date().toISOString().slice(0,10);
-        const present = data.staff.filter(m => m.attendance && m.attendance[today] === 'present').length;
-        document.getElementById('hrSummary').innerHTML = `
-            <div class="stat-card"><div class="label">👥 Total Staff</div><div class="value">${total}</div></div>
-            <div class="stat-card"><div class="label">💰 Total Salary</div><div class="value">₹ ${totalSalary.toFixed(2)}</div></div>
-            <div class="stat-card"><div class="label">💸 Total Advance</div><div class="value" style="color:#b71c1c;">₹ ${totalAdvance.toFixed(2)}</div></div>
-            <div class="stat-card"><div class="label">✅ Present Today</div><div class="value" style="color:var(--green-light);">${present} / ${total}</div></div>
+    function renderSelectedReport(report) {
+        const div = document.getElementById('selectedReportContent');
+        if (!report) {
+            const date = document.getElementById('reportDate').value;
+            report = getDateData(date);
+        }
+        const profit = report.sales - report.expenses;
+        const profitPct = report.sales > 0 ? ((profit / report.sales) * 100).toFixed(1) : 0;
+        div.innerHTML = `
+            <div class="report-grid">
+                <div class="report-item"><span>📅 Date</span><span>${report.date}</span></div>
+                <div class="report-item"><span>💰 Total Sales</span><span>₹ ${report.sales}</span></div>
+                <div class="report-item"><span>💸 Total Expenses</span><span>₹ ${report.expenses}</span></div>
+                <div class="report-item"><span>💵 Cash Collection</span><span>₹ ${report.cash}</span></div>
+                <div class="report-item"><span>📱 Paytm Collection</span><span>₹ ${report.paytm}</span></div>
+                <div class="report-item"><span>🏦 Cash Balance</span><span>₹ ${report.cashBalance}</span></div>
+                <div class="report-item"><span>🏦 Paytm Balance</span><span>₹ ${report.paytmBalance}</span></div>
+                <div class="report-item"><span>📊 Net Profit</span><span>₹ ${profit.toFixed(2)}</span></div>
+                <div class="report-item"><span>📊 Profit %</span><span>${profitPct}%</span></div>
+            </div>
         `;
     }
-
-    // ---------- STAFF ----------
-    function renderStaff() {
-        const tbody = document.getElementById('staffTableBody');
-        const today = new Date().toISOString().slice(0,10);
-        let html = '';
-        data.staff.forEach((m, idx) => {
-            const att = m.attendance && m.attendance[today];
-            const btnClass = att === 'present' ? 'present' : 'absent';
-            const btnText = att === 'present' ? '✅ Present' : '❌ Absent';
-            html += `<tr><td>${idx+1}</td><td><strong>${m.name || 'N/A'}</strong></td><td>${m.role || 'N/A'}</td>
-                <td><span class="badge-gold">${m.salaryType || 'Monthly'}</span></td>
-                <td>₹ ${parseFloat(m.salaryAmt || 0).toFixed(2)}</td>
-                <td style="color:#b71c1c;">₹ ${parseFloat(m.advance || 0).toFixed(2)}</td>
-                <td>${m.workingHours || 8} hrs</td>
-                <td><button class="attendance-btn ${btnClass}" onclick="toggleAttendance(${idx})">${btnText}</button></td>
-                <td><button class="delete-btn" onclick="deleteStaff(${idx})">✕</button></td></tr>`;
-        });
-        tbody.innerHTML = html || '<tr><td colspan="9" style="text-align:center; color:#8d6e63;">No staff added.</td></tr>';
-        renderHRSummary();
-    }
-
-    function toggleAttendance(idx) {
-        const today = new Date().toISOString().slice(0,10);
-        if (!data.staff[idx].attendance) data.staff[idx].attendance = {};
-        data.staff[idx].attendance[today] = data.staff[idx].attendance[today] === 'present' ? 'absent' : 'present';
-        saveData();
-    }
-
-    function addStaff() {
-        const name = document.getElementById('staffName').value.trim();
-        if (!name) return alert('Enter staff name');
-        data.staff.push({
-            id: Date.now(), name, role: document.getElementById('staffRole').value.trim(),
-            phone: document.getElementById('staffPhone').value.trim(),
-            salaryType: document.getElementById('staffSalaryType').value,
-            salaryAmt: parseFloat(document.getElementById('staffSalaryAmt').value) || 0,
-            advance: parseFloat(document.getElementById('staffAdvance').value) || 0,
-            workingHours: parseInt(document.getElementById('staffHours').value) || 8,
-            attendance: {}
-        });
-        ['staffName','staffRole','staffPhone','staffSalaryAmt','staffAdvance'].forEach(id => document.getElementById(id).value = '');
-        saveData();
-    }
-
-    function deleteStaff(idx) { if (!confirm(`Delete "${data.staff[idx].name}"?`)) return; data.staff.splice(idx,1); saveData(); }
 
     // ---------- STOCK ----------
     function renderStock() {
@@ -416,347 +398,129 @@
             html += `<tr><td>${idx+1}</td><td>${item.name}</td><td>${item.qty}</td><td>₹ ${item.price}</td>
                 <td><button class="delete-btn" onclick="deleteStock(${idx})">✕</button></td></tr>`;
         });
-        tbody.innerHTML = html || '<tr><td colspan="5" style="text-align:center; color:#8d6e63;">No stock items.</td></tr>';
+        tbody.innerHTML = html || '<tr><td colspan="5" style="text-align:center; color:#8d6e63;">No items in stock</td></tr>';
     }
     function addStock() {
         const name = document.getElementById('stockName').value.trim();
-        if (!name) return alert('Enter item name');
-        data.stock.push({ id: Date.now(), name, qty: parseInt(document.getElementById('stockQty').value)||0, price: parseFloat(document.getElementById('stockPrice').value)||0 });
-        ['stockName','stockQty','stockPrice'].forEach(id => document.getElementById(id).value = '');
+        const qty = parseInt(document.getElementById('stockQty').value) || 0;
+        const price = parseFloat(document.getElementById('stockPrice').value) || 0;
+        if (!name) return alert('Please enter item name');
+        data.stock.push({ id: Date.now(), name, qty, price });
+        document.getElementById('stockName').value = '';
+        document.getElementById('stockQty').value = '';
+        document.getElementById('stockPrice').value = '';
         saveData();
     }
-    function deleteStock(idx) { if(confirm('Delete?')) { data.stock.splice(idx,1); saveData(); } }
-
-    // ---------- REPORTS ----------
-    function populateFilters() {
-        const ySel = document.getElementById('filterYear');
-        ySel.innerHTML = '<option value="">All Years</option>';
-        for (let y=2020; y<=2030; y++) { const o=document.createElement('option'); o.value=y; o.textContent=y; ySel.appendChild(o); }
-        const mSel = document.getElementById('filterMonth');
-        const mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        mSel.innerHTML = '<option value="">All Months</option>';
-        for (let m=1; m<=12; m++) { const o=document.createElement('option'); o.value=m; o.textContent=mn[m-1]; mSel.appendChild(o); }
+    function deleteStock(idx) {
+        if (!confirm(`Delete "${data.stock[idx].name}"?`)) return;
+        data.stock.splice(idx, 1);
+        saveData();
     }
 
-    function renderReports() {
-        const today = new Date().toLocaleDateString('en-IN');
-        const todayReport = data.reports.filter(r => r.date === today);
-        const lastToday = todayReport.length > 0 ? todayReport[todayReport.length-1] : null;
-        const todayDiv = document.getElementById('todayReportContent');
-        if (lastToday) {
-            todayDiv.innerHTML = `<div class="report-grid">
-                <div class="report-item"><span>📅 Date</span><span>${lastToday.date}</span></div>
-                <div class="report-item"><span>💰 Sales</span><span>₹ ${lastToday.sales}</span></div>
-                <div class="report-item"><span>💸 Expenses</span><span>₹ ${lastToday.expenses}</span></div>
-                <div class="report-item"><span>💵 Cash</span><span>₹ ${lastToday.cash}</span></div>
-                <div class="report-item"><span>📱 Paytm</span><span>₹ ${lastToday.paytm}</span></div>
-                <div class="report-item"><span>📊 Profit</span><span>₹ ${lastToday.profit}</span></div>
-                <div class="report-item"><span>📊 Profit %</span><span>${lastToday.profitPct}%</span></div>
-            </div><p style="margin-top:10px; color:#795548;">✅ Saved at ${new Date().toLocaleTimeString()}</p>`;
-        } else {
-            todayDiv.innerHTML = '<p style="color:#8d6e63;">No report for today.</p>';
-        }
+    // ---------- STAFF ----------
+    function renderStaff() {
+        const tbody = document.getElementById('staffTableBody');
+        let html = '';
+        data.staff.forEach((m, idx) => {
+            html += `<tr><td>${idx+1}</td><td>${m.name}</td><td>${m.role}</td><td>${m.phone}</td>
+                <td><button class="delete-btn" onclick="deleteStaff(${idx})">✕</button></td></tr>`;
+        });
+        tbody.innerHTML = html || '<tr><td colspan="5" style="text-align:center; color:#8d6e63;">No staff added</td></tr>';
+    }
+    function addStaff() {
+        const name = document.getElementById('staffName').value.trim();
+        const role = document.getElementById('staffRole').value.trim();
+        const phone = document.getElementById('staffPhone').value.trim();
+        if (!name) return alert('Please enter staff name');
+        data.staff.push({ id: Date.now(), name, role, phone });
+        document.getElementById('staffName').value = '';
+        document.getElementById('staffRole').value = '';
+        document.getElementById('staffPhone').value = '';
+        saveData();
+    }
+    function deleteStaff(idx) {
+        if (!confirm(`Delete "${data.staff[idx].name}"?`)) return;
+        data.staff.splice(idx, 1);
+        saveData();
+    }
 
-        const yearFilter = parseInt(document.getElementById('filterYear').value) || null;
-        const monthFilter = parseInt(document.getElementById('filterMonth').value) || null;
-        let filtered = data.reports.filter(r => {
-            if (yearFilter && r.year !== yearFilter) return false;
-            if (monthFilter && r.month !== monthFilter) return false;
-            return true;
-        }).sort((a,b) => new Date(b.date.split('/').reverse().join('-')) - new Date(a.date.split('/').reverse().join('-')));
-
+    // ---------- REPORTS LIST ----------
+    function renderReportsList() {
         const listDiv = document.getElementById('allReportsList');
-        if (filtered.length) {
-            let html = '';
-            filtered.forEach(r => {
-                const idx = data.reports.indexOf(r);
-                html += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f0ebe0;">
-                    <span><strong>${r.date}</strong> | Sales: ₹${r.sales} | Profit: ₹${r.profit} (${r.profitPct}%)</span>
-                    <button class="delete-btn" onclick="deleteReport(${idx})">✕</button>
-                </div>`;
-            });
-            listDiv.innerHTML = html;
-        } else {
-            listDiv.innerHTML = '<p style="color:#8d6e63;">No matching reports.</p>';
-        }
-
-        const summaryDiv = document.getElementById('filterSummary');
-        if (filtered.length) {
-            const totalSales = filtered.reduce((s,r) => s + (r.sales||0), 0);
-            const totalProfit = filtered.reduce((s,r) => s + (r.profit||0), 0);
-            summaryDiv.innerHTML = `📊 Filtered Total: ${filtered.length} reports | Sales: ₹${totalSales.toFixed(2)} | Profit: ₹${totalProfit.toFixed(2)}`;
-        } else { summaryDiv.innerHTML = ''; }
-    }
-
-    function saveTodayReport() {
-        const today = new Date();
-        const dateStr = today.toLocaleDateString('en-IN');
-        const profit = data.sales - data.expenses;
-        const profitPct = data.sales > 0 ? ((profit / data.sales) * 100).toFixed(1) : 0;
-        data.reports = data.reports.filter(r => r.date !== dateStr);
-        data.reports.push({
-            date: dateStr, year: today.getFullYear(), month: today.getMonth()+1,
-            sales: data.sales, expenses: data.expenses, cash: data.cashCollection,
-            paytm: data.paytmCollection, profit: parseFloat(profit.toFixed(2)), profitPct: parseFloat(profitPct)
-        });
-        saveData();
-        alert('✅ Report saved!');
-    }
-
-    function deleteReport(idx) { if(confirm('Delete report?')) { data.reports.splice(idx,1); saveData(); } }
-    function resetDaily() {
-        if(!confirm('Reset daily collections & balances?')) return;
-        data.cashCollection=0; data.paytmCollection=0; data.cashBalance=0; data.paytmBalance=0;
-        saveData();
-    }
-
-    // ---------- MONTH BENEFIT ----------
-    function renderMonthBenefit() {
-        const container = document.getElementById('monthBenefitContainer');
-        if (!data.reports || data.reports.length === 0) {
-            container.innerHTML = '<p style="color:#8d6e63;">No reports available to calculate benefit.</p>';
+        if (data.reports.length === 0) {
+            listDiv.innerHTML = '<p style="color:#8d6e63;">No reports saved yet.</p>';
             return;
         }
-        const months = {};
-        data.reports.forEach(r => {
-            const key = `${r.month}/${r.year}`;
-            if (!months[key]) months[key] = { sales: 0, expenses: 0, count: 0 };
-            months[key].sales += r.sales || 0;
-            months[key].expenses += r.expenses || 0;
-            months[key].count += 1;
+        let html = '';
+        // Sort by date descending (newest first)
+        const sorted = [...data.reports].sort((a, b) => (a.date < b.date ? 1 : -1));
+        sorted.forEach((r, idx) => {
+            const profit = (r.sales || 0) - (r.expenses || 0);
+            const realIndex = data.reports.indexOf(r);
+            html += `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #efebe9;">
+                <span><strong>${r.date}</strong> | Sales: ₹${r.sales} | Profit: ₹${profit.toFixed(2)}</span>
+                <button class="delete-btn" onclick="deleteReport(${realIndex})" style="font-size:1rem;">✕</button>
+            </div>`;
         });
-        let html = `<table><thead><tr><th>Month/Year</th><th>Total Sales</th><th>Total Expenses</th><th>Net Profit</th><th>Profit %</th></tr></thead><tbody>`;
-        const sortedKeys = Object.keys(months).sort((a,b) => {
-            const [mA, yA] = a.split('/').map(Number);
-            const [mB, yB] = b.split('/').map(Number);
-            return (yA - yB) || (mA - mB);
-        });
-        let grandSales=0, grandExp=0;
-        sortedKeys.forEach(key => {
-            const d = months[key];
-            const profit = d.sales - d.expenses;
-            const pct = d.sales > 0 ? ((profit/d.sales)*100).toFixed(1) : 0;
-            grandSales += d.sales; grandExp += d.expenses;
-            html += `<tr><td><strong>${key}</strong> (${d.count} days)</td>
-                <td>₹ ${d.sales.toFixed(2)}</td>
-                <td>₹ ${d.expenses.toFixed(2)}</td>
-                <td style="color:${profit>=0?'var(--green-light)':'#b71c1c'};">₹ ${profit.toFixed(2)}</td>
-                <td>${pct}%</td></tr>`;
-        });
-        const grandProfit = grandSales - grandExp;
-        const grandPct = grandSales > 0 ? ((grandProfit/grandSales)*100).toFixed(1) : 0;
-        html += `<tr style="background:var(--gold-light); font-weight:700;"><td>TOTAL (All Months)</td>
-            <td>₹ ${grandSales.toFixed(2)}</td>
-            <td>₹ ${grandExp.toFixed(2)}</td>
-            <td style="color:${grandProfit>=0?'var(--green-light)':'#b71c1c'};">₹ ${grandProfit.toFixed(2)}</td>
-            <td>${grandPct}%</td></tr>`;
-        html += `</tbody></table>`;
-        container.innerHTML = html;
+        listDiv.innerHTML = html;
     }
 
-    // ---------- PERCENTAGE CALCULATOR ----------
-    function calculatePct() {
-        const total = parseFloat(document.getElementById('pctTotal').value);
-        const part = parseFloat(document.getElementById('pctPart').value);
-        const resultDiv = document.getElementById('pctResult');
-        if (isNaN(total) || isNaN(part) || total === 0) {
-            resultDiv.innerHTML = '⚠️ Please enter valid numbers (Total must be > 0)';
-            resultDiv.style.color = '#b71c1c';
-            return;
-        }
-        const pct = (part / total) * 100;
-        resultDiv.innerHTML = `📊 ${part} is <span style="color:var(--gold);">${pct.toFixed(2)}%</span> of ${total}`;
-        resultDiv.style.color = 'var(--green)';
+    function deleteReport(idx) {
+        if (!confirm('Delete this report?')) return;
+        data.reports.splice(idx, 1);
+        saveData();
+        renderReportsList();
+        loadDateData(); // Refresh dashboard
     }
 
-    // ---------- BACKUP ----------
-    function exportBackup() {
-        const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    // ---------- BACKUP / RESTORE ----------
+    function exportData() {
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
+        a.href = url;
         a.download = `cafe_backup_${new Date().toISOString().slice(0,10)}.json`;
         a.click();
+        URL.revokeObjectURL(url);
     }
-    function importBackup(e) {
-        const file = e.target.files[0];
+
+    function importData(event) {
+        const file = event.target.files[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = function(ev) {
+        reader.onload = function(e) {
             try {
-                const imported = JSON.parse(ev.target.result);
-                if (confirm('Overwrite current data?')) {
-                    for (let key in imported) if (data.hasOwnProperty(key)) data[key] = imported[key];
-                    if (!Array.isArray(data.stock)) data.stock = [];
-                    if (!Array.isArray(data.staff)) data.staff = [];
-                    if (!Array.isArray(data.reports)) data.reports = [];
+                const imported = JSON.parse(e.target.result);
+                if (confirm('Restore this backup? Current data will be overwritten!')) {
+                    if (imported.reports) data.reports = imported.reports;
+                    if (imported.stock) data.stock = imported.stock;
+                    if (imported.staff) data.staff = imported.staff;
                     saveData();
-                    alert('✅ Restored!');
+                    alert('✅ Data restored successfully!');
                 }
-            } catch(err) { alert('❌ Invalid file'); }
+            } catch (err) {
+                alert('❌ Invalid file format.');
+            }
         };
         reader.readAsText(file);
-        e.target.value = '';
+        event.target.value = '';
     }
 
-    // ---------- PDF GENERATION (FIXED) ----------
-    function generatePDF(elementId, filename) {
-        const element = document.getElementById(elementId);
-        // Temporarily show element for rendering
-        element.style.left = '0';
-        element.style.position = 'relative';
-        element.style.zIndex = '0';
-        
-        return html2pdf()
-            .set({
-                margin: [15, 15],
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, letterRendering: true, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            })
-            .from(element)
-            .outputPdf('blob')
-            .then(blob => {
-                // Hide again
-                element.style.left = '-9999px';
-                element.style.position = 'absolute';
-                element.style.zIndex = '-1';
-                return blob;
-            })
-            .catch(err => {
-                // Hide again on error
-                element.style.left = '-9999px';
-                element.style.position = 'absolute';
-                element.style.zIndex = '-1';
-                throw err;
-            });
-    }
-
-    function downloadPDF(blob, filename) {
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-    }
-
-    // ---------- HR PDF ----------
-    function prepareHRPDF() {
-        const today = new Date().toISOString().slice(0,10);
-        document.getElementById('pdf-date').textContent = new Date().toLocaleString();
-        const tbody = document.getElementById('pdf-staff-body');
-        let html = '', totalSalary=0, totalAdvance=0, presentCount=0;
-        data.staff.forEach(m => {
-            const att = m.attendance && m.attendance[today] === 'present' ? '✅ Present' : '❌ Absent';
-            if (m.attendance && m.attendance[today] === 'present') presentCount++;
-            totalSalary += parseFloat(m.salaryAmt || 0);
-            totalAdvance += parseFloat(m.advance || 0);
-            html += `<tr><td>${m.name}</td><td>${m.role}</td><td>${m.salaryType}</td>
-                <td>₹ ${parseFloat(m.salaryAmt||0).toFixed(2)}</td>
-                <td>₹ ${parseFloat(m.advance||0).toFixed(2)}</td>
-                <td>${m.workingHours||8} hrs</td><td>${att}</td></tr>`;
-        });
-        tbody.innerHTML = html || '<tr><td colspan="7">No staff data.</td></tr>';
-        document.getElementById('pdf-total-staff').textContent = data.staff.length;
-        document.getElementById('pdf-total-salary').textContent = totalSalary.toFixed(2);
-        document.getElementById('pdf-total-advance').textContent = totalAdvance.toFixed(2);
-        document.getElementById('pdf-total-present').textContent = presentCount;
-    }
-
-    function exportHRPDF() {
-        prepareHRPDF();
-        generatePDF('hr-pdf-content', `HR_Report_${new Date().toISOString().slice(0,10)}.pdf`)
-            .then(blob => downloadPDF(blob, `HR_Report_${new Date().toISOString().slice(0,10)}.pdf`))
-            .catch(err => alert('PDF generation failed: ' + err.message));
-    }
-
-    function shareHRPDF() {
-        prepareHRPDF();
-        generatePDF('hr-pdf-content', `HR_Report_${new Date().toISOString().slice(0,10)}.pdf`)
-            .then(blob => {
-                const file = new File([blob], `HR_Report_${new Date().toISOString().slice(0,10)}.pdf`, { type: 'application/pdf' });
-                if (navigator.share) {
-                    navigator.share({ files: [file], title: 'HR Report' }).catch(()=>{});
-                } else {
-                    downloadPDF(blob, `HR_Report_${new Date().toISOString().slice(0,10)}.pdf`);
-                }
-            })
-            .catch(err => alert('PDF generation failed: ' + err.message));
-    }
-
-    // ---------- SALES PDF GENERATORS ----------
-    function prepareSalesPDF(title, dataObj) {
-        document.getElementById('sales-pdf-title').textContent = title;
-        document.getElementById('sales-pdf-date').textContent = new Date().toLocaleString();
-        const body = document.getElementById('sales-pdf-body');
-        body.innerHTML = `
-            <div class="report-item"><span>📅 Period</span><span>${dataObj.period}</span></div>
-            <div class="report-item"><span>💰 Total Sales</span><span>₹ ${dataObj.sales}</span></div>
-            <div class="report-item"><span>💸 Total Expenses</span><span>₹ ${dataObj.expenses}</span></div>
-            <div class="report-item"><span>💵 Cash Collection</span><span>₹ ${dataObj.cash}</span></div>
-            <div class="report-item"><span>📱 Paytm Collection</span><span>₹ ${dataObj.paytm}</span></div>
-            <div class="report-item"><span>📊 Net Profit</span><span>₹ ${dataObj.profit}</span></div>
-            <div class="report-item"><span>📊 Profit %</span><span>${dataObj.pct}%</span></div>
-        `;
-        document.getElementById('sales-pdf-total-sales').textContent = dataObj.sales;
-        document.getElementById('sales-pdf-total-expenses').textContent = dataObj.expenses;
-        document.getElementById('sales-pdf-total-profit').textContent = dataObj.profit;
-        document.getElementById('sales-pdf-total-pct').textContent = dataObj.pct;
-    }
-
-    function generateDayPDF() {
-        const today = new Date();
-        const dateStr = today.toLocaleDateString('en-IN');
-        const report = data.reports.filter(r => r.date === dateStr);
-        let d;
-        if (report.length > 0) {
-            const r = report[report.length-1];
-            d = { period: dateStr, sales: r.sales.toFixed(2), expenses: r.expenses.toFixed(2), cash: r.cash.toFixed(2), paytm: r.paytm.toFixed(2), profit: r.profit.toFixed(2), pct: r.profitPct };
+    // ---------- RESET ----------
+    function resetDaily() {
+        if (!confirm('Reset current date data to zero? (Keeps stock and staff)')) return;
+        const date = document.getElementById('reportDate').value;
+        if (!date) return;
+        let index = data.reports.findIndex(r => r.date === date);
+        if (index === -1) {
+            data.reports.push({ date, sales: 0, expenses: 0, cash: 0, paytm: 0, cashBalance: 0, paytmBalance: 0 });
         } else {
-            const profit = data.sales - data.expenses;
-            const pct = data.sales > 0 ? ((profit/data.sales)*100).toFixed(1) : 0;
-            d = { period: dateStr + ' (Live)', sales: data.sales.toFixed(2), expenses: data.expenses.toFixed(2), cash: data.cashCollection.toFixed(2), paytm: data.paytmCollection.toFixed(2), profit: profit.toFixed(2), pct: pct };
+            data.reports[index] = { date, sales: 0, expenses: 0, cash: 0, paytm: 0, cashBalance: 0, paytmBalance: 0 };
         }
-        prepareSalesPDF(`Day Report - ${dateStr}`, d);
-        generatePDF('sales-pdf-content', `Sales_Day_${dateStr.replace(/\//g,'-')}.pdf`)
-            .then(blob => downloadPDF(blob, `Sales_Day_${dateStr.replace(/\//g,'-')}.pdf`))
-            .catch(err => alert('PDF generation failed: ' + err.message));
-    }
-
-    function generateMonthPDF() {
-        const year = parseInt(document.getElementById('filterYear').value) || new Date().getFullYear();
-        const month = parseInt(document.getElementById('filterMonth').value) || (new Date().getMonth()+1);
-        const filtered = data.reports.filter(r => r.year === year && r.month === month);
-        if (filtered.length === 0) { alert('No reports found for this month.'); return; }
-        const sales = filtered.reduce((s,r) => s + r.sales, 0);
-        const expenses = filtered.reduce((s,r) => s + r.expenses, 0);
-        const cash = filtered.reduce((s,r) => s + r.cash, 0);
-        const paytm = filtered.reduce((s,r) => s + r.paytm, 0);
-        const profit = sales - expenses;
-        const pct = sales > 0 ? ((profit/sales)*100).toFixed(1) : 0;
-        const mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        const period = `${mn[month-1]} ${year}`;
-        prepareSalesPDF(`Month Report - ${period}`, { period, sales: sales.toFixed(2), expenses: expenses.toFixed(2), cash: cash.toFixed(2), paytm: paytm.toFixed(2), profit: profit.toFixed(2), pct });
-        generatePDF('sales-pdf-content', `Sales_Month_${period.replace(' ','_')}.pdf`)
-            .then(blob => downloadPDF(blob, `Sales_Month_${period.replace(' ','_')}.pdf`))
-            .catch(err => alert('PDF generation failed: ' + err.message));
-    }
-
-    function generateYearPDF() {
-        const year = parseInt(document.getElementById('filterYear').value) || new Date().getFullYear();
-        const filtered = data.reports.filter(r => r.year === year);
-        if (filtered.length === 0) { alert('No reports found for this year.'); return; }
-        const sales = filtered.reduce((s,r) => s + r.sales, 0);
-        const expenses = filtered.reduce((s,r) => s + r.expenses, 0);
-        const cash = filtered.reduce((s,r) => s + r.cash, 0);
-        const paytm = filtered.reduce((s,r) => s + r.paytm, 0);
-        const profit = sales - expenses;
-        const pct = sales > 0 ? ((profit/sales)*100).toFixed(1) : 0;
-        prepareSalesPDF(`Year Report - ${year}`, { period: `${year}`, sales: sales.toFixed(2), expenses: expenses.toFixed(2), cash: cash.toFixed(2), paytm: paytm.toFixed(2), profit: profit.toFixed(2), pct });
-        generatePDF('sales-pdf-content', `Sales_Year_${year}.pdf`)
-            .then(blob => downloadPDF(blob, `Sales_Year_${year}.pdf`))
-            .catch(err => alert('PDF generation failed: ' + err.message));
+        saveData();
+        loadDateData();
+        alert('✅ Reset complete.');
     }
 
     // ---------- TABS ----------
@@ -766,17 +530,28 @@
             this.classList.add('active');
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById('tab-' + this.dataset.tab).classList.add('active');
-            if (this.dataset.tab === 'reports') { renderReports(); renderMonthBenefit(); }
-            if (this.dataset.tab === 'staff') { renderStaff(); renderHRSummary(); }
+            if (this.dataset.tab === 'reports') renderReportsList();
             if (this.dataset.tab === 'stock') renderStock();
-            if (this.dataset.tab === 'dashboard') renderDashboard();
+            if (this.dataset.tab === 'staff') renderStaff();
+            if (this.dataset.tab === 'dashboard') loadDateData();
         });
     });
 
     // ---------- INIT ----------
-    loadData();
-    populateFilters();
-    renderAll();
+    // Auto-load date on page load
+    window.onload = function() {
+        loadData();
+        // Set today's date if no current date stored
+        const today = new Date().toISOString().split('T')[0];
+        const savedDate = localStorage.getItem('cafeCurrentDate');
+        const startDate = savedDate || today;
+        document.getElementById('reportDate').value = startDate;
+        data.currentDate = startDate;
+        // Load the date
+        loadDateData();
+    };
+
+    // Save data before leaving
     window.addEventListener('beforeunload', saveData);
 </script>
 </body>
