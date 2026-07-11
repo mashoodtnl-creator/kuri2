@@ -117,6 +117,33 @@
         .date-selector input[type="date"]:focus { outline: 2px solid #8d6e63; border-color: transparent; }
         .date-selector .btn { width: auto; padding: 8px 24px; }
 
+        .month-summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        .month-summary-table th {
+            background: #4e342e;
+            color: #f4ebe6;
+            padding: 10px;
+            text-align: left;
+        }
+        .month-summary-table td {
+            padding: 10px;
+            border-bottom: 1px solid #d7ccc8;
+        }
+        .month-summary-table tr:hover {
+            background: #efebe9;
+        }
+        .month-summary-table .total-row {
+            background: #b8860b;
+            color: white;
+            font-weight: 700;
+        }
+        .month-summary-table .total-row td {
+            border-bottom: none;
+        }
+
         @media (max-width: 600px) {
             .header h1 { font-size: 1.8rem; }
             .grid-4 { grid-template-columns: 1fr 1fr; }
@@ -205,14 +232,32 @@
 
     <!-- REPORTS -->
     <div id="tab-reports" class="tab-content">
+        <!-- Monthly Summary -->
+        <div class="report-box">
+            <h3>📊 Month-wise Summary</h3>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:16px;">
+                <label for="yearSelect">Year:</label>
+                <select id="yearSelect" onchange="renderMonthSummary()">
+                    <!-- populated by JS -->
+                </select>
+                <button class="btn btn-sm btn-outline" onclick="renderMonthSummary()">🔄 Refresh</button>
+            </div>
+            <div id="monthSummaryContainer" style="overflow-x:auto;">
+                <!-- table will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Daily Report for Selected Date -->
         <div class="report-box">
             <h3>📋 Daily Report (Selected Date)</h3>
             <div id="selectedReportContent">
                 <p>Select a date and load.</p>
             </div>
         </div>
+
+        <!-- All Daily Reports List -->
         <div class="report-box">
-            <h3>📜 All Saved Reports</h3>
+            <h3>📜 All Saved Daily Reports</h3>
             <div id="allReportsList" style="max-height:300px; overflow-y:auto;"></div>
         </div>
     </div>
@@ -228,7 +273,6 @@
 <script>
     // ---------- DATA LAYER ----------
     let data = {
-        // These will be loaded based on selected date
         currentDate: new Date().toISOString().split('T')[0],
         reports: [], // { date, sales, expenses, cash, paytm, cashBalance, paytmBalance }
         stock: [], // {id, name, qty, price}
@@ -246,35 +290,26 @@
                 if (parsed.staff) data.staff = parsed.staff;
             } catch (e) { console.warn("Load error", e); }
         }
-        // Initialize default date
-        document.getElementById('reportDate').value = data.currentDate;
-        // If reports array doesn't exist, initialize
         if (!Array.isArray(data.reports)) data.reports = [];
+        if (!Array.isArray(data.stock)) data.stock = [];
+        if (!Array.isArray(data.staff)) data.staff = [];
+        document.getElementById('reportDate').value = data.currentDate;
     }
 
     function saveData() {
         localStorage.setItem('cafeData', JSON.stringify(data));
         renderAll();
         renderReportsList();
+        renderMonthSummary();
     }
 
     // ---------- DATE HANDLING ----------
     function getDateData(dateStr) {
-        if (!dateStr) dateStr = document.getElementById('reportDate').value || data.currentDate;
         let report = data.reports.find(r => r.date === dateStr);
         if (!report) {
-            // Create default empty report for this date
-            report = {
-                date: dateStr,
-                sales: 0,
-                expenses: 0,
-                cash: 0,
-                paytm: 0,
-                cashBalance: 0,
-                paytmBalance: 0
-            };
+            report = { date: dateStr, sales: 0, expenses: 0, cash: 0, paytm: 0, cashBalance: 0, paytmBalance: 0 };
             data.reports.push(report);
-            saveData(); // Save immediately so it persists
+            saveData();
         }
         return report;
     }
@@ -284,12 +319,10 @@
         if (!date) return alert('ഒരു തീയതി തിരഞ്ഞെടുക്കുക.');
         data.currentDate = date;
         const report = getDateData(date);
-        // Populate the dashboard cards with this date's data
         renderDashboard(report);
         renderSelectedReport(report);
-        // Update the report list
         renderReportsList();
-        // Save current date
+        renderMonthSummary();
         localStorage.setItem('cafeCurrentDate', date);
     }
 
@@ -297,7 +330,6 @@
         const date = document.getElementById('reportDate').value;
         if (!date) return alert('ഒരു തീയതി തിരഞ്ഞെടുക്കുക.');
         
-        // Get current values from input fields
         const sales = parseFloat(document.getElementById('input_sales').value) || 0;
         const expenses = parseFloat(document.getElementById('input_expenses').value) || 0;
         const cash = parseFloat(document.getElementById('input_cash').value) || 0;
@@ -305,7 +337,6 @@
         const cashBal = parseFloat(document.getElementById('input_cashBal').value) || 0;
         const paytmBal = parseFloat(document.getElementById('input_paytmBal').value) || 0;
 
-        // Find or create report
         let index = data.reports.findIndex(r => r.date === date);
         if (index === -1) {
             data.reports.push({ date, sales, expenses, cash, paytm, cashBalance: cashBal, paytmBalance: paytmBal });
@@ -314,16 +345,15 @@
         }
         saveData();
         alert(`✅ ${date} ലെ വിവരങ്ങൾ സേവ് ചെയ്തു!`);
-        loadDateData(); // Refresh view
+        loadDateData();
     }
 
     // ---------- RENDER ----------
     function renderAll() {
-        // Only render non-dashboard parts (stock, staff, reports list)
         renderStock();
         renderStaff();
         renderReportsList();
-        // Load current date data
+        renderMonthSummary();
         const currentDate = localStorage.getItem('cafeCurrentDate') || new Date().toISOString().split('T')[0];
         document.getElementById('reportDate').value = currentDate;
         loadDateData();
@@ -390,6 +420,106 @@
         `;
     }
 
+    // ---------- MONTHLY SUMMARY ----------
+    function renderMonthSummary() {
+        const year = parseInt(document.getElementById('yearSelect').value) || new Date().getFullYear();
+        const container = document.getElementById('monthSummaryContainer');
+
+        // Group reports by month
+        const monthMap = {};
+        data.reports.forEach(r => {
+            const d = new Date(r.date + 'T00:00:00');
+            const y = d.getFullYear();
+            if (y !== year) return;
+            const key = d.getMonth() + 1; // 1-12
+            if (!monthMap[key]) {
+                monthMap[key] = { sales: 0, expenses: 0, cash: 0, paytm: 0, cashBal: 0, paytmBal: 0, count: 0 };
+            }
+            monthMap[key].sales += r.sales || 0;
+            monthMap[key].expenses += r.expenses || 0;
+            monthMap[key].cash += r.cash || 0;
+            monthMap[key].paytm += r.paytm || 0;
+            monthMap[key].cashBal += r.cashBalance || 0;
+            monthMap[key].paytmBal += r.paytmBalance || 0;
+            monthMap[key].count += 1;
+        });
+
+        // Prepare table rows
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        let html = '';
+        if (Object.keys(monthMap).length === 0) {
+            html = '<p style="color:#8d6e63;">No reports found for this year.</p>';
+        } else {
+            html = `<table class="month-summary-table">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Days</th>
+                        <th>Total Sales</th>
+                        <th>Total Expenses</th>
+                        <th>Total Cash</th>
+                        <th>Total Paytm</th>
+                        <th>Net Profit</th>
+                        <th>Profit %</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            let grandSales = 0, grandExp = 0, grandCash = 0, grandPaytm = 0, grandBalCash = 0, grandBalPaytm = 0, daysTotal = 0;
+            for (let m = 1; m <= 12; m++) {
+                if (!monthMap[m]) continue;
+                const d = monthMap[m];
+                const profit = d.sales - d.expenses;
+                const pct = d.sales > 0 ? ((profit / d.sales) * 100).toFixed(1) : 0;
+                html += `<tr>
+                    <td><strong>${monthNames[m-1]}</strong></td>
+                    <td>${d.count}</td>
+                    <td>₹ ${d.sales.toFixed(2)}</td>
+                    <td>₹ ${d.expenses.toFixed(2)}</td>
+                    <td>₹ ${d.cash.toFixed(2)}</td>
+                    <td>₹ ${d.paytm.toFixed(2)}</td>
+                    <td style="color:${profit>=0 ? '#2e7d32' : '#a52a2a'}">₹ ${profit.toFixed(2)}</td>
+                    <td>${pct}%</td>
+                </tr>`;
+                grandSales += d.sales;
+                grandExp += d.expenses;
+                grandCash += d.cash;
+                grandPaytm += d.paytm;
+                grandBalCash += d.cashBal;
+                grandBalPaytm += d.paytmBal;
+                daysTotal += d.count;
+            }
+            const grandProfit = grandSales - grandExp;
+            const grandPct = grandSales > 0 ? ((grandProfit / grandSales) * 100).toFixed(1) : 0;
+            html += `<tr class="total-row">
+                <td><strong>TOTAL</strong></td>
+                <td>${daysTotal}</td>
+                <td>₹ ${grandSales.toFixed(2)}</td>
+                <td>₹ ${grandExp.toFixed(2)}</td>
+                <td>₹ ${grandCash.toFixed(2)}</td>
+                <td>₹ ${grandPaytm.toFixed(2)}</td>
+                <td>₹ ${grandProfit.toFixed(2)}</td>
+                <td>${grandPct}%</td>
+            </tr>`;
+            html += `</tbody></table>`;
+        }
+        container.innerHTML = html;
+    }
+
+    // Populate year selector
+    function populateYearSelect() {
+        const sel = document.getElementById('yearSelect');
+        const currentYear = new Date().getFullYear();
+        sel.innerHTML = '';
+        for (let y = currentYear; y >= currentYear - 5; y--) {
+            const opt = document.createElement('option');
+            opt.value = y;
+            opt.textContent = y;
+            sel.appendChild(opt);
+        }
+        // Set to current year
+        sel.value = currentYear;
+    }
+
     // ---------- STOCK ----------
     function renderStock() {
         const tbody = document.getElementById('stockTableBody');
@@ -452,7 +582,6 @@
             return;
         }
         let html = '';
-        // Sort by date descending (newest first)
         const sorted = [...data.reports].sort((a, b) => (a.date < b.date ? 1 : -1));
         sorted.forEach((r, idx) => {
             const profit = (r.sales || 0) - (r.expenses || 0);
@@ -469,8 +598,23 @@
         if (!confirm('Delete this report?')) return;
         data.reports.splice(idx, 1);
         saveData();
-        renderReportsList();
-        loadDateData(); // Refresh dashboard
+        loadDateData();
+    }
+
+    // ---------- RESET ----------
+    function resetDaily() {
+        if (!confirm('Reset current date data to zero? (Keeps stock and staff)')) return;
+        const date = document.getElementById('reportDate').value;
+        if (!date) return;
+        let index = data.reports.findIndex(r => r.date === date);
+        if (index === -1) {
+            data.reports.push({ date, sales: 0, expenses: 0, cash: 0, paytm: 0, cashBalance: 0, paytmBalance: 0 });
+        } else {
+            data.reports[index] = { date, sales: 0, expenses: 0, cash: 0, paytm: 0, cashBalance: 0, paytmBalance: 0 };
+        }
+        saveData();
+        loadDateData();
+        alert('✅ Reset complete.');
     }
 
     // ---------- BACKUP / RESTORE ----------
@@ -507,22 +651,6 @@
         event.target.value = '';
     }
 
-    // ---------- RESET ----------
-    function resetDaily() {
-        if (!confirm('Reset current date data to zero? (Keeps stock and staff)')) return;
-        const date = document.getElementById('reportDate').value;
-        if (!date) return;
-        let index = data.reports.findIndex(r => r.date === date);
-        if (index === -1) {
-            data.reports.push({ date, sales: 0, expenses: 0, cash: 0, paytm: 0, cashBalance: 0, paytmBalance: 0 });
-        } else {
-            data.reports[index] = { date, sales: 0, expenses: 0, cash: 0, paytm: 0, cashBalance: 0, paytmBalance: 0 };
-        }
-        saveData();
-        loadDateData();
-        alert('✅ Reset complete.');
-    }
-
     // ---------- TABS ----------
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -530,7 +658,10 @@
             this.classList.add('active');
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById('tab-' + this.dataset.tab).classList.add('active');
-            if (this.dataset.tab === 'reports') renderReportsList();
+            if (this.dataset.tab === 'reports') {
+                renderReportsList();
+                renderMonthSummary();
+            }
             if (this.dataset.tab === 'stock') renderStock();
             if (this.dataset.tab === 'staff') renderStaff();
             if (this.dataset.tab === 'dashboard') loadDateData();
@@ -538,20 +669,16 @@
     });
 
     // ---------- INIT ----------
-    // Auto-load date on page load
     window.onload = function() {
         loadData();
-        // Set today's date if no current date stored
+        populateYearSelect();
         const today = new Date().toISOString().split('T')[0];
-        const savedDate = localStorage.getItem('cafeCurrentDate');
-        const startDate = savedDate || today;
-        document.getElementById('reportDate').value = startDate;
-        data.currentDate = startDate;
-        // Load the date
+        const savedDate = localStorage.getItem('cafeCurrentDate') || today;
+        document.getElementById('reportDate').value = savedDate;
+        data.currentDate = savedDate;
         loadDateData();
     };
 
-    // Save data before leaving
     window.addEventListener('beforeunload', saveData);
 </script>
 </body>
